@@ -1,0 +1,12 @@
+.ant-float-btn-default .ant-float-btn-body:hover {
+  background-color: white;
+  opacity: 0.9;
+}
+
+.ant-btn-primary {
+  background-color: #1677ff !important;
+}
+
+.ant-btn {
+  background-color: #1677ff !important;
+}
