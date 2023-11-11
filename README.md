@@ -1,6 +1,7 @@
-### See our video tutorial here:
+# Cinema 8 | Screen Recorder
 
-https://youtu.be/nvm3c6ilcN8
+Web app & Chrome extension by kinddev813
 
-### Check out the write-up here:
-https://anobjectisa.com/?p=135
+- React: ^18.2.0
+- Node: ^16.20.2
+- Ant Design: ^5.9.4
