@@ -62,17 +62,6 @@ function Popup() {
   const [audioDeviceExisting, setAudioDeviceExisting] = useState(false);
   const [videoDeviceExisting, setVideoDeviceExisting] = useState(false);
 
-  useEffect(() => {
-    chrome.permissions.contains(
-      {
-        permissions: ["tabs", "microphone", "camera"],
-      },
-      function (result) {
-        console.log("Chrome Audio and VIdeo permission~~~~~~~~~~", result);
-      }
-    );
-  });
-
   // Get camera & audio device
   useEffect(() => {
     const getDeviceName = async () => {
@@ -91,11 +80,9 @@ function Popup() {
         await navigator.mediaDevices
           .getUserMedia({ video: true, audio: true })
           .then((stream) => {
-            console.log(stream);
             console.log("You can use Audio and Video device");
           })
           .catch((err) => {
-            console.log(err);
             console.log("You can not use Audio and Video device");
           });
         setVideoDeviceExisting(true);
@@ -133,7 +120,6 @@ function Popup() {
   useEffect(() => {
     if (videoDeviceExisting) {
       navigator.permissions.query({ name: "camera" }).then((res) => {
-        console.log("camera is existing~~~~~~~~~~~~~", res);
         if (res.state == "granted") {
           setCameraAllowed(true);
           onGetDeviceSource();

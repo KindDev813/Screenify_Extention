@@ -25,12 +25,7 @@
     "storage",
     "identity",
     "downloads.shelf",
-    "file://*"
-  ],
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["contentScript/main.js"]
-    }
+    "file://*",
+    "desktopCapture"
   ]
 }
