@@ -1,6 +1,6 @@
 import React from "react";
 
-export const CAMERA_ALLOWED = "You can use your device!";
+export const CAMERA_ALLOWED_MESSAGE = "You can use your device!";
 export const CAMERA_BLOCKED = "Please allow permission of your device!";
 export const MICROPHONE_ALLOWED = "You can use your microphone!";
 export const MICROPHONE_BLOCKED = "Please allow permission of your microphone!";
@@ -103,3 +103,11 @@ export const LOCAL_STORAGE = {
 };
 
 export const DRAG_DATA_KEY = "__drag_data_payload__";
+
+export const EVENT = {
+  CAMERA_ALLOWED: "cameraAllowed",
+  MIC_ALLOWED: "micAllowed",
+  CAMERA_OPTIONS: "cameraOptions",
+  MIC_OPTIONS: "micOptions",
+  POPUP_ALLOWED: "popupAllowed",
+};

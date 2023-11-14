@@ -5,6 +5,15 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
+  mode: "production",
+  cache: {
+    // If using webpack 5, the recommended type is 'filesystem'
+    type: "filesystem",
+    buildDependencies: {
+      // With this configuration, webpack will automatically manage caching when these files change.
+      config: ["/node_modules/"], // Include this config file
+    },
+  },
   devServer: {
     contentBase: path.resolve(__dirname, "./src"),
     historyApiFallback: true,
@@ -32,10 +41,12 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
+        exclude: /node_modules/,
         use: [
           {
             loader: "babel-loader",
             options: {
+              cacheDirectory: true,
               presets: [
                 "@babel/preset-env",
                 "@babel/preset-react",
