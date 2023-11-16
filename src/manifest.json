@@ -1,32 +1,35 @@
 {
   "name": "Cinema 8",
-  "description": "Screen Recorder",
   "version": "0.1.0",
-  "manifest_version": 2,
-  "icons": {
-    "16": "./obj-16x16.png",
-    "32": "./obj-32x32.png",
-    "48": "./obj-48x48.png",
-    "128": "./obj-128x128.png"
-  },
+  "manifest_version": 3,
   "background": {
-    "scripts": ["./background.js"]
-  },
-  "options_page": "./options.html",
-  "browser_action": {
-    "default_popup": "popup.html"
+    "service_worker": "./background.js"
   },
   "permissions": [
     "tabs",
-    "<all_urls>",
     "activeTab",
     "tabCapture",
     "downloads",
     "storage",
     "identity",
     "downloads.shelf",
-    "file://*",
     "desktopCapture",
-    "storage"
-  ]
+    "scripting"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "./obj-16x16.png",
+    "32": "./obj-32x32.png",
+    "48": "./obj-48x48.png",
+    "128": "./obj-128x128.png"
+  },
+  "description": "Screen Recorder",
+  "options_page": "./options.html",
+  "content_security_policy": {
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+    "sandbox": "sandbox allow-scripts allow-forms allow-popups allow-modals; script-src 'self' 'unsafe-inline' 'unsafe-eval'; child-src 'self';"
+  }
 }

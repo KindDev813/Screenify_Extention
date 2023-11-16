@@ -1,3 +1,6 @@
+/*!*********************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./src/Components/WebcamDrag/style.css ***!
+  \*********************************************************************************************************************************/
 .ant-float-btn-default .ant-float-btn-body:hover {
   background-color: white;
   opacity: 0.9;
@@ -11,11 +14,18 @@
   background-color: #1677ff !important;
 }
 
-.time_counter_modal .ant-modal-content {
+/*!***************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./src/Components/TimeCounterModal/style.css ***!
+  \***************************************************************************************************************************************/
+:where(.css-1adbn6x).ant-modal .ant-modal-content {
   background: transparent !important;
   box-shadow: none !important;
+  border-radius: 100% !important;
 }
 
+/*!*************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./src/Components/AnnotationTool/style.css ***!
+  \*************************************************************************************************************************************/
 .ant-float-btn-icon {
   width: 100% !important;
 }
@@ -25,6 +35,9 @@
   height: 15px !important;
 }
 
+/*!************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./src/styles.css ***!
+  \************************************************************************************************************/
 /*
 ! tailwindcss v3.3.5 | MIT License | https://tailwindcss.com
 *//*
@@ -655,6 +668,12 @@ video {
 .z-50 {
   z-index: 50;
 }
+.col-span-1 {
+  grid-column: span 1 / span 1;
+}
+.col-span-6 {
+  grid-column: span 6 / span 6;
+}
 .col-span-7 {
   grid-column: span 7 / span 7;
 }
@@ -838,8 +857,17 @@ video {
 .h-\[80px\] {
   height: 80px;
 }
+.h-auto {
+  height: auto;
+}
 .h-full {
   height: 100%;
+}
+.h-screen {
+  height: 100vh;
+}
+.w-\[100\%\] {
+  width: 100%;
 }
 .w-\[100px\] {
   width: 100px;
@@ -861,6 +889,12 @@ video {
 }
 .w-full {
   width: 100%;
+}
+.min-w-\[50px\] {
+  min-width: 50px;
+}
+.max-w-\[70\%\] {
+  max-width: 70%;
 }
 .flex-shrink {
   flex-shrink: 1;
@@ -1117,6 +1151,9 @@ video {
 .grid-flow-col-dense {
   grid-auto-flow: column dense;
 }
+.grid-cols-7 {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
 .flex-row {
   flex-direction: row;
 }
@@ -1254,6 +1291,9 @@ video {
 }
 .justify-items-stretch {
   justify-items: stretch;
+}
+.gap-4 {
+  gap: 1rem;
 }
 .space-x-2 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
@@ -1590,6 +1630,9 @@ video {
 .border-none {
   border-style: none;
 }
+.border-\[\#00000057\] {
+  border-color: #00000057;
+}
 .border-\[\#1677ff\] {
   --tw-border-opacity: 1;
   border-color: rgb(22 119 255 / var(--tw-border-opacity));
@@ -1701,6 +1744,9 @@ video {
   -o-object-fit: scale-down;
      object-fit: scale-down;
 }
+.\!p-0 {
+  padding: 0px !important;
+}
 .p-1 {
   padding: 0.25rem;
 }
@@ -1716,11 +1762,18 @@ video {
 .p-3 {
   padding: 0.75rem;
 }
+.p-4 {
+  padding: 1rem;
+}
 .p-7 {
   padding: 1.75rem;
 }
 .p-8 {
   padding: 2rem;
+}
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }
 .text-left {
   text-align: left;
@@ -1769,9 +1822,6 @@ video {
 }
 .text-\[12px\] {
   font-size: 12px;
-}
-.text-\[150px\] {
-  font-size: 150px;
 }
 .text-\[15px\] {
   font-size: 15px;
@@ -2170,8 +2220,30 @@ video {
 }
 @media (min-width: 640px) {
 
+  .sm\:w-\[50px\] {
+    width: 50px;
+  }
+
+  .sm\:py-2 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
   .sm\:underline {
     text-decoration-line: underline;
+  }
+}
+@media (min-width: 768px) {
+
+  .md\:py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+}
+@media (min-width: 1024px) {
+
+  .lg\:w-\[70px\] {
+    width: 70px;
   }
 }
 @media (prefers-color-scheme: dark) {
@@ -2183,4 +2255,18 @@ video {
     }
   }
 }
+@media (min-width: 1280px) {
 
+  .xl\:w-\[90px\] {
+    width: 90px;
+  }
+}
+@media (min-width: 1536px) {
+
+  .\32xl\:w-\[95px\] {
+    width: 95px;
+  }
+}
+
+
+/*# sourceMappingURL=foreground.css.map*/

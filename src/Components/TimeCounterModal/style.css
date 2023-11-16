@@ -1,4 +1,5 @@
-.time_counter_modal .ant-modal-content {
+:where(.css-1adbn6x).ant-modal .ant-modal-content {
   background: transparent !important;
   box-shadow: none !important;
+  border-radius: 100% !important;
 }
