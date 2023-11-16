@@ -131,7 +131,7 @@ function Popup() {
     }
   }, [cameraSource, cameraAllowed]);
 
-  // Pausing and Resuming
+  // Pausing and Resuming-Now is not available
   const onPauseResume = () => {
     if (mediaRecorder.state === "recording") {
       mediaRecorder.pause();
