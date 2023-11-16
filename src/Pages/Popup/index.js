@@ -8,7 +8,8 @@ import {
 } from "@ant-design/icons";
 
 import LabelSelect from "../../Components/LabelSelect";
-import { QUALITYOPTIONS, LABEL } from "../../utils/constants";
+import { QUALITYOPTIONS, LABEL, EVENT } from "../../utils/constants";
+import { sendDatatoForeGround } from "../../utils/functions";
 import "./style.css";
 
 let mediaRecorder = null;
@@ -45,6 +46,8 @@ function Popup() {
   const [microphoneAllowed, setMicrophoneAllowed] = useState(false); // Microphone permission status
   const [microphoneOptions, setMicrophoneOptions] = useState([]); // Microphone source list
   const [cameraOptions, setCameraOptions] = useState([]); // Camera source list
+
+  const [pressStartButton, setPressStartButton] = useState(false);
 
   useEffect(() => {
     chrome.storage.sync.get("CAMERA_ALLOWED", function (result) {
@@ -119,12 +122,12 @@ function Popup() {
   useEffect(() => {
     if (cameraAllowed) {
       if (cameraSource === "Disabled") {
-        chrome.storage.sync.set({ ["VISIBLE_WEBCAM_DRAG"]: false });
+        sendDatatoForeGround({ type: EVENT.VISIBLE_WEBCAM_DRAG, data: false });
       } else {
-        chrome.storage.sync.set({ ["VISIBLE_WEBCAM_DRAG"]: true });
+        sendDatatoForeGround({ type: EVENT.VISIBLE_WEBCAM_DRAG, data: true });
       }
     } else {
-      chrome.storage.sync.set({ ["VISIBLE_WEBCAM_DRAG"]: false });
+      sendDatatoForeGround({ type: EVENT.VISIBLE_WEBCAM_DRAG, data: false });
     }
   }, [cameraSource, cameraAllowed]);
 
@@ -138,35 +141,35 @@ function Popup() {
   };
 
   const onClickRecordingStartOrStop = () => {
-    chrome.storage.sync.set({ ["RECORDING_STARTED"]: recordingStarted });
+    sendDatatoForeGround({ type: EVENT.PRESS_START_BUTTON, data: true });
   };
 
   const onRecordingMode = (value) => {
     setRecordingMode(value);
-    chrome.storage.sync.set({ ["RECORDING_MODE"]: value });
+    sendDatatoForeGround({ type: EVENT.RECORDING_MODE, data: value });
   };
 
   const onChangeCameraSource = (value) => {
     if (value === "Disabled") {
       setCameraSource("Disabled");
-      chrome.storage.sync.set({ ["CAMERA_SOURCE"]: "Disabled" });
+      sendDatatoForeGround({ type: EVENT.CAMERA_SOURCE, data: "Disabled" });
     } else {
       setCameraSource(value);
-      chrome.storage.sync.set({ ["CAMERA_SOURCE"]: value });
+      sendDatatoForeGround({ type: EVENT.CAMERA_SOURCE, data: value });
     }
   };
 
   const onChangeMicrophoneSource = (value) => {
     if (value === "Disabled") {
-      chrome.storage.sync.set({ ["MIC_SOURCE"]: "Disabled" });
+      sendDatatoForeGround({ type: EVENT.MIC_SOURCE, data: "Disabled" });
     } else {
-      chrome.storage.sync.set({ ["MIC_SOURCE"]: value });
+      sendDatatoForeGround({ type: EVENT.MIC_SOURCE, data: value });
     }
   };
 
   const onQualityDefaultValue = (value) => {
     setQualityDefaultValue(value);
-    chrome.storage.sync.set({ ["QUALITY_VALUE"]: value });
+    sendDatatoForeGround({ type: EVENT.QUALITY_VALUE, data: value });
   };
 
   return (

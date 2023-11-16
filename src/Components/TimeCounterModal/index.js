@@ -15,7 +15,10 @@ const TimeCounterModal = (props) => {
         width={"275px"}
         className="time_counter_modal"
       >
-        <p className="text-[150px] flex w-full justify-center my-auto not-italic font-bold bg-transparent">
+        <p
+          className="flex w-full justify-center my-auto not-italic font-bold bg-transparent"
+          style={{ fontSize: "150px" }}
+        >
           {countNumber}
         </p>
       </Modal>

@@ -1,1 +1,21 @@
-chrome.tabs.onUpdated.addListener((function(e,t,n){"complete"===t.status&&n.url.includes("http")&&chrome.tabs.executeScript(e,{file:"./inject_script.js"},(function(){chrome.tabs.executeScript(e,{file:"./foreground.bundle.js"},(function(){console.log("INJECTED AND EXECUTED")}))}))})),chrome.storage.onChanged.addListener(((e,t)=>{for(let[n,{oldValue:o,newValue:c}]of Object.entries(e))console.log(`Storage key "${n}" in namespace "${t}" changed.`,`Old value was "${o}", new value is "${c}".`)}));
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  if (changeInfo.status === "complete" && tab.url.includes("http")) {
+    chrome.scripting.executeScript(
+      {
+        target: { tabId: tabId },
+        files: ["./inject_script.js"],
+      },
+      () => {
+        chrome.scripting.executeScript(
+          {
+            target: { tabId: tabId },
+            files: ["./foreground.bundle.js"],
+          },
+          () => {
+            console.log("INJECTED AND EXECUTED");
+          }
+        );
+      }
+    );
+  }
+});
