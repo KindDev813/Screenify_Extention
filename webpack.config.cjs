@@ -5,7 +5,8 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  mode: "production",
+  // mode: "production",
+  devtool: "cheap-module-source-map",
   cache: {
     // If using webpack 5, the recommended type is 'filesystem'
     type: "filesystem",

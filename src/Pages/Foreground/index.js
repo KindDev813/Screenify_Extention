@@ -4,7 +4,7 @@ import TimeCounterModal from "../../Components/TimeCounterModal";
 import AnnotationTool from "../../Components/AnnotationTool";
 
 import { alertModal, isEmpty } from "../../utils/functions";
-import { EVENT } from "../../utils/constants";
+import { EVENT, LOCAL_STORAGE } from "../../utils/constants";
 
 let mediaRecorder = null,
   stream = null,
@@ -33,88 +33,36 @@ function Foreground() {
   const [videoDeviceExisting, setVideoDeviceExisting] = useState(false);
   const [foregroundVisiable, setForegroundVisible] = useState(false);
   const [visibleWebcamDrag, setVisibleWebcamDrag] = useState(false); // Webcam Drag enable/disable
-
-  const onPauseResume = () => {};
+  const [pressStartButton, setPressStartButton] = useState(false);
 
   useEffect(() => {
-    chrome.storage.sync.get("VISIBLE_WEBCAM_DRAG", function (result) {
-      if (chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError);
-      } else {
-        setVisibleWebcamDrag(result.VISIBLE_WEBCAM_DRAG);
-      }
-    });
-
-    chrome.storage.sync.get("RECORDING_STARTED", function (result) {
-      if (chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError);
-      } else {
-        setRecordingStarted(result.RECORDING_STARTED);
-      }
-    });
-
-    chrome.storage.sync.get("RECORDING_MODE", function (result) {
-      if (chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError);
-      } else {
-        setRecordingMode(result.RECORDING_MODE);
-      }
-    });
-
-    chrome.storage.sync.get("CAMERA_SOURCE", function (result) {
-      if (chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError);
-      } else {
-        setCameraSource(result.CAMERA_SOURCE);
-      }
-    });
-
-    chrome.storage.sync.get("QUALITY_VALUE", function (result) {
-      if (chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError);
-      } else {
-        setQualityDefaultValue(result.QUALITY_VALUE);
-      }
-    });
-
-    chrome.storage.sync.get("MIC_SOURCE", function (result) {
-      if (chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError);
-      } else {
-        setMicrophoneSource(result.MIC_SOURCE);
-      }
-    });
-
-    const storageListener = (changes, areaName) => {
-      if (areaName !== "sync") return;
-      if (changes.VISIBLE_WEBCAM_DRAG) {
-        setVisibleWebcamDrag(changes.VISIBLE_WEBCAM_DRAG.newValue);
-      }
-
-      if (changes.RECORDING_STARTED) {
-        setRecordingStarted(changes.RECORDING_STARTED.newValue);
-      }
-
-      if (changes.RECORDING_MODE) {
-        setRecordingMode(changes.RECORDING_MODE.newValue);
-      }
-
-      if (changes.CAMERA_SOURCE) {
-        setCameraSource(changes.CAMERA_SOURCE.newValue);
-      }
-
-      if (changes.MIC_SOURCE) {
-        setMicrophoneSource(changes.MIC_SOURCE.newValue);
-      }
-
-      if (changes.QUALITY_VALUE) {
-        setQualityDefaultValue(changes.QUALITY_VALUE.newValue);
+    const messageListener = (request, sender, sendResponse) => {
+      if (isEmpty(request)) return;
+      switch (request.type) {
+        case EVENT.PRESS_START_BUTTON:
+          setPressStartButton(request.data);
+          break;
+        case EVENT.VISIBLE_WEBCAM_DRAG:
+          setVisibleWebcamDrag(request.data);
+          break;
+        case EVENT.RECORDING_MODE:
+          setRecordingMode(request.data);
+          break;
+        case EVENT.CAMERA_SOURCE:
+          setCameraSource(request.data);
+          break;
+        case EVENT.QUALITY_VALUE:
+          setQualityDefaultValue(request.data);
+          break;
+        case EVENT.MIC_SOURCE:
+          setMicrophoneSource(request.data);
+          break;
       }
     };
 
-    chrome.storage.onChanged.addListener(storageListener);
+    chrome.runtime.onMessage.addListener(messageListener);
     return () => {
-      chrome.storage.onChanged.removeListener(storageListener);
+      chrome.runtime.onMessage.removeListener(messageListener);
     };
   }, []);
 
@@ -197,8 +145,11 @@ function Foreground() {
   }, [audioDeviceExisting, videoDeviceExisting]);
 
   useEffect(() => {
-    !recordingStarted ? onStartRecording() : onSaveRecording();
-  }, [recordingStarted]);
+    if (pressStartButton) {
+      !recordingStarted ? onStartRecording() : onSaveRecording();
+      setPressStartButton(false);
+    }
+  }, [pressStartButton]);
 
   // Putting chunks during the recording
   useEffect(() => {
@@ -212,6 +163,47 @@ function Foreground() {
       mediaRecorder.start();
     }
   }, [mediaRecorder]);
+
+  // Time counter
+  useEffect(() => {
+    let temp = 4;
+    function updateCountdown() {
+      switch (temp) {
+        case 0:
+          onCloseModalStartRecording();
+          setVisibleEditMenu(true);
+          break;
+        case 1:
+          setRecordingStarted(true);
+          chrome.storage.sync.set({ ["RECORDING_STARTED"]: true });
+          setVisibleTimeCounterModal(false);
+        default:
+          temp--;
+          setCountNumber(temp);
+          setTimeout(updateCountdown, 1000);
+      }
+    }
+
+    if (visibleTimeCounterModal) {
+      updateCountdown();
+    }
+  }, [visibleTimeCounterModal]);
+
+  useEffect(() => {
+    const onEnded = () => {
+      onSaveRecording();
+    };
+
+    if (stream) {
+      stream.getVideoTracks()[0].addEventListener("ended", onEnded);
+    }
+
+    return () => {
+      if (stream) {
+        stream.getVideoTracks()[0].removeEventListener("ended", onEnded);
+      }
+    };
+  }, [stream]);
 
   const onGetDeviceSource = async () => {
     let audioDevices = [],
@@ -255,47 +247,6 @@ function Foreground() {
       });
     }
   };
-
-  // Time counter
-  useEffect(() => {
-    let temp = 4;
-    function updateCountdown() {
-      switch (temp) {
-        case 0:
-          onCloseModalStartRecording();
-          // setVisibleEditMenu(true);
-          break;
-        case 1:
-          setRecordingStarted(true);
-          chrome.storage.sync.set({ ["RECORDING_STARTED"]: true });
-          setVisibleTimeCounterModal(false);
-        default:
-          temp--;
-          setCountNumber(temp);
-          setTimeout(updateCountdown, 1000);
-      }
-    }
-
-    if (visibleTimeCounterModal) {
-      updateCountdown();
-    }
-  }, [visibleTimeCounterModal]);
-
-  useEffect(() => {
-    const onEnded = () => {
-      onSaveRecording();
-    };
-
-    if (stream) {
-      stream.getVideoTracks()[0].addEventListener("ended", onEnded);
-    }
-
-    return () => {
-      if (stream) {
-        stream.getVideoTracks()[0].removeEventListener("ended", onEnded);
-      }
-    };
-  }, [stream]);
 
   // Start recording &  Getting the stream and merging the each stream according to recording mode
   const onStartRecording = async () => {
@@ -374,7 +325,7 @@ function Foreground() {
           setVisibleTimeCounterModal(true);
         } else {
           onCloseModalStartRecording();
-          // setVisibleEditMenu(true);
+          setVisibleEditMenu(true);
           setRecordingStarted(true);
           chrome.storage.sync.set({ ["RECORDING_STARTED"]: true });
         }
@@ -386,19 +337,20 @@ function Foreground() {
 
   // Saving & downloading chunks into file
   const onSaveRecording = async () => {
+    console.log("Recording is ended~~~~~~~~~~~~~~~~~~~~~~~~~~");
     if (mediaRecorder) {
       mediaRecorder.stop();
       mediaRecorder.onstop = async () => {
         const blob = new Blob(recordedChunks, { type: "video/mp4" });
         const url = URL.createObjectURL(blob);
 
-        // recordingEndTime = new Date().getTime();
-        // localStorage.setItem(LOCAL_STORAGE.BLOB_LINKS, JSON.stringify(url));
-        // localStorage.setItem(
-        //   LOCAL_STORAGE.RECORDING_DURATION,
-        //   (recordingEndTime - recordingStartTime).toString()
-        // );
-        // navigate("/editMedia");
+        recordingEndTime = new Date().getTime();
+        localStorage.setItem(LOCAL_STORAGE.BLOB_LINKS, JSON.stringify(url));
+        localStorage.setItem(
+          LOCAL_STORAGE.RECORDING_DURATION,
+          (recordingEndTime - recordingStartTime).toString()
+        );
+        window.open(chrome.runtime.getURL("options.html"));
 
         stream.getTracks().forEach((element) => {
           element.stop();
@@ -416,7 +368,7 @@ function Foreground() {
 
     setRecordingStarted(false);
     chrome.storage.sync.set({ ["RECORDING_STARTED"]: false });
-    // setVisibleEditMenu(false); // Closing edit tools menu
+    setVisibleEditMenu(false); // Closing edit tools menu
   };
 
   const onCloseModalStartRecording = () => {
@@ -428,6 +380,14 @@ function Foreground() {
     });
   };
 
+  const onPauseResume = () => {
+    if (mediaRecorder.state === "recording") {
+      mediaRecorder.pause();
+    } else if (mediaRecorder.state === "paused") {
+      mediaRecorder.resume();
+    }
+  };
+
   return (
     <div
       className={`col-span-7 flex flex-col my-auto fixed z-50 ${
@@ -435,20 +395,22 @@ function Foreground() {
       } `}
     >
       {visibleWebcamDrag && <WebcamDrag cameraDeviceId={cameraSource} />}
-
       {/* Time counter modal */}
       <TimeCounterModal
         visibleTimeCounterModal={visibleTimeCounterModal}
         countNumber={countNumber}
       />
-      {/* <AnnotationTool
-        handleSaveRecording={() => {
-          onSaveRecording();
-        }}
-        handlePauseResume={() => {
-          onPauseResume();
-        }}
-      /> */}
+
+      {visibleEditMenu && (
+        <AnnotationTool
+          handleSaveRecording={() => {
+            onSaveRecording();
+          }}
+          handlePauseResume={() => {
+            onPauseResume();
+          }}
+        />
+      )}
     </div>
   );
 }

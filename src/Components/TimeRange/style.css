@@ -1,0 +1,176 @@
+:root {
+  --react-time-range--gray: #b3b3b4;
+  --react-time-range--highlight-tap: #000000;
+  --react-time-range--rail-bg: #f5f7fa;
+  --react-time-range--handle-bg: #ffffff;
+  --react-time-range--handle-bg--disabled: #666;
+  --react-time-range--track--valid: rgb(98, 203, 102);
+  --react-time-range--track--not-valid: rgb(98, 203, 102);
+  --react-time-range--track--disabled: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 3px,
+    #d0d3d7 4px,
+    #d0d3d7 2px
+  );
+}
+
+.react_time_range__time_range_container {
+  padding: 30px 10% 0;
+  height: 70px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.react_time_range__keyboard_handle {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.react_time_range__track {
+  position: absolute;
+  transform: translate(0%, -50%);
+  height: 65px;
+  cursor: ew-resize;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease;
+  z-index: 3;
+  border-style: solid;
+  border-width: 3px !important;
+  border-color: #ffd843 !important;
+  border-radius: 7px;
+}
+
+.react_time_range__track_temp {
+  position: absolute;
+  transform: translate(0%, -50%);
+  height: 65px;
+  cursor: ew-resize;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease;
+  z-index: 3;
+  border-style: solid;
+  border-width: 1px !important;
+  margin-top: -50px;
+}
+
+.react_time_range__track__disabled {
+  position: absolute;
+  transform: translate(0%, -50%);
+  height: 65px;
+  cursor: ew-resize;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease;
+  z-index: 1;
+  border-left: 1px solid var(--react-time-range--gray);
+  border-right: 1px solid var(--react-time-range--gray);
+  background: var(--react-time-range--track--disabled);
+}
+
+.react_time_range__rail__outer {
+  position: absolute;
+  width: 100%;
+  height: 65px;
+  transform: translate(0%, -50%);
+  cursor: ew-resize;
+}
+
+.react_time_range__rail__inner_org {
+  position: absolute;
+  width: 100%;
+  height: 65px;
+  transform: translate(0%, -50%);
+  pointer-events: none;
+  background-color: var(--react-time-range--rail-bg);
+  border-radius: 7px;
+  filter: grayscale(1);
+}
+
+.react_time_range__rail__inner_top {
+  position: absolute;
+  width: 100%;
+  height: 65px;
+  transform: translate(0%, -50%);
+  pointer-events: none;
+  background-color: var(--react-time-range--rail-bg);
+  border-radius: 7px;
+}
+
+.react_time_range__rail__inner_container {
+  position: relative;
+}
+
+.react_time_range__handle_wrapper {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  -webkit-tap-highlight-color: var(--react-time-range--highlight-tap);
+  z-index: 6;
+  width: 24px;
+  height: 24px;
+  cursor: ew-resize;
+  background-color: transparent;
+}
+
+.react_time_range__handle_container {
+  position: absolute;
+  display: flex;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  width: 10px;
+  height: 24px;
+  border-radius: 4px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+  background-color: var(--react-time-range--handle-bg);
+  margin-top: -50px;
+  cursor: ew-resize;
+}
+
+.react_time_range__handle_container__disabled {
+  position: absolute;
+  display: flex;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  width: 10px;
+  height: 24px;
+  border-radius: 4px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+  background-color: var(--react-time-range--handle-bg--disabled);
+}
+
+.react_time_range__handle_marker {
+  width: 2px;
+  height: 12px;
+  margin: auto;
+  border-radius: 2px;
+  background-color: var(--react-time-range--track--valid);
+  transition: background-color 0.2s ease;
+}
+
+.react_time_range__handle_marker__error {
+  width: 2px;
+  height: 12px;
+  margin: auto;
+  border-radius: 2px;
+  background-color: var(--react-time-range--track--not-valid);
+}
+
+.react_time_range__tick_marker {
+  position: absolute;
+  margin-top: -55px;
+  width: 2px;
+  height: 6px;
+  background-color: var(--react-time-range--gray);
+  z-index: 2;
+}
+
+.react_time_range__tick_label {
+  position: absolute;
+  margin-top: -78px;
+  font-size: 15px;
+  text-align: center;
+  z-index: 2;
+  color: #000;
+  font-family: sans-serif;
+}

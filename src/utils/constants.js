@@ -1,7 +1,7 @@
 import React from "react";
 
 export const CAMERA_ALLOWED_MESSAGE = "You can use your device!";
-export const CAMERA_BLOCKED = "Please allow permission of your device!";
+export const CAMERA_BLOCKED_MESSAGE = "Please allow permission of your device!";
 export const MICROPHONE_ALLOWED = "You can use your microphone!";
 export const MICROPHONE_BLOCKED = "Please allow permission of your microphone!";
 
@@ -110,4 +110,10 @@ export const EVENT = {
   CAMERA_OPTIONS: "cameraOptions",
   MIC_OPTIONS: "micOptions",
   POPUP_ALLOWED: "popupAllowed",
+  PRESS_START_BUTTON: "pressStartButton",
+  VISIBLE_WEBCAM_DRAG: "visibleWebcamDrag",
+  RECORDING_MODE: "recordingMode",
+  CAMERA_SOURCE: "cameraSource",
+  QUALITY_VALUE: "qualityValue",
+  MIC_SOURCE: "micSource",
 };
