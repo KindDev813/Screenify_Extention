@@ -6,6 +6,8 @@ import AnnotationTool from "../../Components/AnnotationTool";
 import { alertModal, isEmpty } from "../../utils/functions";
 import { EVENT, LOCAL_STORAGE } from "../../utils/constants";
 
+import "./style.css";
+
 let mediaRecorder = null,
   stream = null,
   screenStream = null,
@@ -31,9 +33,9 @@ function Foreground() {
 
   const [audioDeviceExisting, setAudioDeviceExisting] = useState(false);
   const [videoDeviceExisting, setVideoDeviceExisting] = useState(false);
-  const [foregroundVisiable, setForegroundVisible] = useState(false);
   const [visibleWebcamDrag, setVisibleWebcamDrag] = useState(false); // Webcam Drag enable/disable
   const [pressStartButton, setPressStartButton] = useState(false);
+  const [foregroundVisible, setForegroundVisible] = useState(false);
 
   useEffect(() => {
     const messageListener = (request, sender, sendResponse) => {
@@ -56,6 +58,9 @@ function Foreground() {
           break;
         case EVENT.MIC_SOURCE:
           setMicrophoneSource(request.data);
+          break;
+        case EVENT.FOREGROUND_VISIBLE:
+          setForegroundVisible(request.data);
           break;
       }
     };
@@ -117,8 +122,10 @@ function Foreground() {
       }
     };
 
-    getDeviceName();
-  }, []);
+    if (foregroundVisible) {
+      getDeviceName();
+    }
+  }, [foregroundVisible]);
 
   useEffect(() => {
     if (videoDeviceExisting) {
@@ -390,9 +397,10 @@ function Foreground() {
 
   return (
     <div
-      className={`col-span-7 flex flex-col my-auto fixed z-50 ${
-        foregroundVisiable ? "" : "hidden"
-      } `}
+      // className={`col-span-7 flex flex-col my-auto fixed z-50 ${
+      //   foregroundVisiable ? "" : "hidden"
+      // } `}
+      className={`col-span-7 flex flex-col my-auto fixed z-50`}
     >
       {visibleWebcamDrag && <WebcamDrag cameraDeviceId={cameraSource} />}
       {/* Time counter modal */}

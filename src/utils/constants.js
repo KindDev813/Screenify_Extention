@@ -116,4 +116,5 @@ export const EVENT = {
   CAMERA_SOURCE: "cameraSource",
   QUALITY_VALUE: "qualityValue",
   MIC_SOURCE: "micSource",
+  FOREGROUND_VISIBLE: "foregroundVisible",
 };
