@@ -256,7 +256,7 @@ function Popup() {
             >
               <div className="flex flex-col justify-center h-full w-full w-[60px]">
                 {modeLabel.icon}
-                <span className="text-[12px] whitespace-nowrap flex w-full">
+                <span className="text-[12px] whitespace-nowrap flex w-full justify-center">
                   {modeLabel.label}
                 </span>
               </div>

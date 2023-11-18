@@ -60,7 +60,7 @@ const EditToolMenu = (props) => {
               >
                 <div className="flex flex-col py-1 sm:py-2 md:py-3 justify-center h-full min-w-[50px] w-full sm:w-[50px] lg:w-[70px] xl:w-[90px] 2xl:w-[95px]">
                   {editTool.icon}
-                  <span className="text-[12px] whitespace-nowrap">
+                  <span className="flex justify-center text-[12px] whitespace-nowrap">
                     {editTool.label}
                   </span>
                 </div>

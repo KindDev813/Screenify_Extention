@@ -20258,7 +20258,7 @@ function Popup() {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       className: "flex flex-col justify-center h-full w-full w-[60px]"
     }, modeLabel.icon, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
-      className: "text-[12px] whitespace-nowrap flex w-full"
+      className: "text-[12px] whitespace-nowrap flex w-full justify-center"
     }, modeLabel.label)));
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Components_LabelSelect__WEBPACK_IMPORTED_MODULE_1__["default"], {
     label: _utils_constants__WEBPACK_IMPORTED_MODULE_2__.LABEL.CAMERA,

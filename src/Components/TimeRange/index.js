@@ -24,11 +24,28 @@ const TimeRange = (props) => {
 
   useEffect(() => {
     if (localVideoLink) {
-      handleMaxTime(
-        Math.floor(
-          localStorage.getItem(LOCAL_STORAGE.RECORDING_DURATION) / 1000
-        )
-      );
+      chrome.storage.sync.get("RECORDING_DURATION", function (result) {
+        if (chrome.runtime.lastError) {
+          console.error(chrome.runtime.lastError);
+        } else {
+          result.BLOB_LINK
+            ? handleMaxTime(result.RECORDING_DURATION)
+            : handleMaxTime();
+        }
+      });
+
+      const storageListener = (changes, areaName) => {
+        if (areaName !== "sync") return;
+        if (changes.BLOB_LINK) {
+          handleMaxTime(changes.RECORDING_DURATION.newValue);
+        }
+      };
+
+      chrome.storage.onChanged.addListener(storageListener);
+
+      return () => {
+        chrome.storage.onChanged.removeListener(storageListener);
+      };
     } else {
       handleMaxTime(0);
     }

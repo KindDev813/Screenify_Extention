@@ -344,7 +344,6 @@ function Foreground() {
 
   // Saving & downloading chunks into file
   const onSaveRecording = async () => {
-    console.log("Recording is ended~~~~~~~~~~~~~~~~~~~~~~~~~~");
     if (mediaRecorder) {
       mediaRecorder.stop();
       mediaRecorder.onstop = async () => {
@@ -352,12 +351,17 @@ function Foreground() {
         const url = URL.createObjectURL(blob);
 
         recordingEndTime = new Date().getTime();
-        localStorage.setItem(LOCAL_STORAGE.BLOB_LINKS, JSON.stringify(url));
-        localStorage.setItem(
-          LOCAL_STORAGE.RECORDING_DURATION,
-          (recordingEndTime - recordingStartTime).toString()
-        );
-        window.open(chrome.runtime.getURL("options.html"));
+        chrome.storage.sync.set({ ["BLOB_LINK"]: JSON.stringify(url) });
+        chrome.storage.sync.set({
+          ["RECORDING_DURATION"]: (
+            recordingEndTime - recordingStartTime
+          ).toString(),
+        });
+
+        chrome.runtime.sendMessage({
+          action: "createOptionPage",
+          url: chrome.runtime.getURL("options.html"),
+        });
 
         stream.getTracks().forEach((element) => {
           element.stop();
