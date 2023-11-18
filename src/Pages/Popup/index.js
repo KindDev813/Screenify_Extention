@@ -9,7 +9,7 @@ import {
 
 import LabelSelect from "../../Components/LabelSelect";
 import { QUALITYOPTIONS, LABEL, EVENT } from "../../utils/constants";
-import { sendDatatoForeGround } from "../../utils/functions";
+import { isEmpty, sendDatatoForeGround } from "../../utils/functions";
 import "./style.css";
 
 let mediaRecorder = null;
@@ -36,11 +36,12 @@ const modeLabels = [
 ];
 
 function Popup() {
-  const [recordingMode, setRecordingMode] = useState(0); // Recording status: 0(Full Screen), 1(Window), 2(Current Tab), 3(Camera only)
-  const [qualityDefaultValue, setQualityDefaultValue] = useState("3000000"); // Recording quality status
+  const [recordingMode, setRecordingMode] = useState(); // Recording status: 0(Full Screen), 1(Window), 2(Current Tab), 3(Camera only)
+  const [qualityDefaultValue, setQualityDefaultValue] = useState(""); // Recording quality status
 
   const [recordingStarted, setRecordingStarted] = useState(false); // Recording start
   const [cameraSource, setCameraSource] = useState("Disabled"); // Camera source deviceId
+  const [micSource, setMicSource] = useState("Disabled"); // Camera source deviceId
 
   const [cameraAllowed, setCameraAllowed] = useState(false); // Camera permission status
   const [microphoneAllowed, setMicrophoneAllowed] = useState(false); // Microphone permission status
@@ -48,6 +49,13 @@ function Popup() {
   const [cameraOptions, setCameraOptions] = useState([]); // Camera source list
 
   const [pressStartButton, setPressStartButton] = useState(false);
+
+  useEffect(() => {
+    sendDatatoForeGround({ type: EVENT.FOREGROUND_VISIBLE, data: true });
+    return () => {
+      sendDatatoForeGround({ type: EVENT.FOREGROUND_VISIBLE, data: false });
+    };
+  }, []);
 
   useEffect(() => {
     chrome.storage.sync.get("CAMERA_ALLOWED", function (result) {
@@ -90,6 +98,54 @@ function Popup() {
       }
     });
 
+    chrome.storage.sync.get("RECORDING_MODE", function (result) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+      } else {
+        if (isEmpty(result.RECORDING_MODE)) {
+          setRecordingMode(0);
+        } else {
+          setRecordingMode(result.RECORDING_MODE);
+        }
+      }
+    });
+
+    chrome.storage.sync.get("QUALITY_VALUE", function (result) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+      } else {
+        if (isEmpty(result.QUALITY_VALUE)) {
+          setQualityDefaultValue("3000000");
+        } else {
+          setQualityDefaultValue(result.QUALITY_VALUE);
+        }
+      }
+    });
+
+    chrome.storage.sync.get("CAMERA_SOURCE", function (result) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+      } else {
+        if (isEmpty(result.CAMERA_SOURCE)) {
+          setCameraSource("Disabled");
+        } else {
+          setCameraSource(result.CAMERA_SOURCE);
+        }
+      }
+    });
+
+    chrome.storage.sync.get("MIC_SOURCE", function (result) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+      } else {
+        if (isEmpty(result.MIC_SOURCE)) {
+          setMicSource("Disabled");
+        } else {
+          setMicSource(result.MIC_SOURCE);
+        }
+      }
+    });
+
     const storageListener = (changes, areaName) => {
       if (areaName !== "sync") return;
       if (changes.CAMERA_ALLOWED) {
@@ -111,6 +167,22 @@ function Popup() {
       if (changes.RECORDING_STARTED) {
         setRecordingStarted(changes.RECORDING_STARTED.newValue);
       }
+
+      if (changes.RECORDING_MODE) {
+        setRecordingMode(changes.RECORDING_MODE.newValue);
+      }
+
+      if (changes.QUALITY_VALUE) {
+        setQualityDefaultValue(changes.QUALITY_VALUE.newValue);
+      }
+
+      if (changes.CAMERA_SOURCE) {
+        setCameraSource(changes.CAMERA_SOURCE.newValue);
+      }
+
+      if (changes.MIC_SOURCE) {
+        setMicSource(changes.MIC_SOURCE.newValue);
+      }
     };
 
     chrome.storage.onChanged.addListener(storageListener);
@@ -131,15 +203,6 @@ function Popup() {
     }
   }, [cameraSource, cameraAllowed]);
 
-  // Pausing and Resuming-Now is not available
-  const onPauseResume = () => {
-    if (mediaRecorder.state === "recording") {
-      mediaRecorder.pause();
-    } else if (mediaRecorder.state === "paused") {
-      mediaRecorder.resume();
-    }
-  };
-
   const onClickRecordingStartOrStop = () => {
     sendDatatoForeGround({ type: EVENT.PRESS_START_BUTTON, data: true });
   };
@@ -147,29 +210,35 @@ function Popup() {
   const onRecordingMode = (value) => {
     setRecordingMode(value);
     sendDatatoForeGround({ type: EVENT.RECORDING_MODE, data: value });
+    chrome.storage.sync.set({ ["RECORDING_MODE"]: value });
   };
 
   const onChangeCameraSource = (value) => {
     if (value === "Disabled") {
       setCameraSource("Disabled");
       sendDatatoForeGround({ type: EVENT.CAMERA_SOURCE, data: "Disabled" });
+      chrome.storage.sync.set({ ["CAMERA_SOURCE"]: "Disabled" });
     } else {
       setCameraSource(value);
       sendDatatoForeGround({ type: EVENT.CAMERA_SOURCE, data: value });
+      chrome.storage.sync.set({ ["CAMERA_SOURCE"]: value });
     }
   };
 
   const onChangeMicrophoneSource = (value) => {
     if (value === "Disabled") {
       sendDatatoForeGround({ type: EVENT.MIC_SOURCE, data: "Disabled" });
+      chrome.storage.sync.set({ ["MIC_SOURCE"]: "Disabled" });
     } else {
       sendDatatoForeGround({ type: EVENT.MIC_SOURCE, data: value });
+      chrome.storage.sync.set({ ["MIC_SOURCE"]: value });
     }
   };
 
   const onQualityDefaultValue = (value) => {
     setQualityDefaultValue(value);
     sendDatatoForeGround({ type: EVENT.QUALITY_VALUE, data: value });
+    chrome.storage.sync.set({ ["QUALITY_VALUE"]: value });
   };
 
   return (
@@ -200,6 +269,7 @@ function Popup() {
         label={LABEL.CAMERA}
         options={cameraOptions}
         allowed={cameraAllowed}
+        value={cameraSource}
         onChangeDeviceSource={(value) => onChangeCameraSource(value)}
       />
 
@@ -208,6 +278,7 @@ function Popup() {
         label={LABEL.MICROPHONE}
         options={microphoneOptions}
         allowed={microphoneAllowed}
+        value={micSource}
         onChangeDeviceSource={(value) => onChangeMicrophoneSource(value)}
       />
 

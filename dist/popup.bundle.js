@@ -19902,6 +19902,7 @@ var LabelSelect = function LabelSelect(props) {
   var label = props.label,
     options = props.options,
     allowed = props.allowed,
+    value = props.value,
     onChangeDeviceSource = props.onChangeDeviceSource;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", {
     className: "mt-5 text-start font-bold"
@@ -19912,7 +19913,8 @@ var LabelSelect = function LabelSelect(props) {
     },
     options: options,
     className: "mt-2 w-full h-[40px]",
-    disabled: !allowed
+    disabled: !allowed,
+    value: value
   }), allowed ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", {
     className: "mt-1 text-start text-[#31a15c]"
   }, _utils_constants__WEBPACK_IMPORTED_MODULE_1__.CAMERA_ALLOWED_MESSAGE) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", {
@@ -19945,6 +19947,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/constants */ "./src/utils/constants.js");
 /* harmony import */ var _utils_functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/functions */ "./src/utils/functions.js");
 /* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./style.css */ "./src/Pages/Popup/style.css");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -19993,11 +19999,11 @@ var modeLabels = [{
   })
 }];
 function Popup() {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(),
     _useState2 = _slicedToArray(_useState, 2),
     recordingMode = _useState2[0],
     setRecordingMode = _useState2[1]; // Recording status: 0(Full Screen), 1(Window), 2(Current Tab), 3(Camera only)
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("3000000"),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState4 = _slicedToArray(_useState3, 2),
     qualityDefaultValue = _useState4[0],
     setQualityDefaultValue = _useState4[1]; // Recording quality status
@@ -20010,28 +20016,44 @@ function Popup() {
     _useState8 = _slicedToArray(_useState7, 2),
     cameraSource = _useState8[0],
     setCameraSource = _useState8[1]; // Camera source deviceId
-
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("Disabled"),
     _useState10 = _slicedToArray(_useState9, 2),
-    cameraAllowed = _useState10[0],
-    setCameraAllowed = _useState10[1]; // Camera permission status
+    micSource = _useState10[0],
+    setMicSource = _useState10[1]; // Camera source deviceId
+
   var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState12 = _slicedToArray(_useState11, 2),
-    microphoneAllowed = _useState12[0],
-    setMicrophoneAllowed = _useState12[1]; // Microphone permission status
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    cameraAllowed = _useState12[0],
+    setCameraAllowed = _useState12[1]; // Camera permission status
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState14 = _slicedToArray(_useState13, 2),
-    microphoneOptions = _useState14[0],
-    setMicrophoneOptions = _useState14[1]; // Microphone source list
+    microphoneAllowed = _useState14[0],
+    setMicrophoneAllowed = _useState14[1]; // Microphone permission status
   var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState16 = _slicedToArray(_useState15, 2),
-    cameraOptions = _useState16[0],
-    setCameraOptions = _useState16[1]; // Camera source list
-
-  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    microphoneOptions = _useState16[0],
+    setMicrophoneOptions = _useState16[1]; // Microphone source list
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState18 = _slicedToArray(_useState17, 2),
-    pressStartButton = _useState18[0],
-    setPressStartButton = _useState18[1];
+    cameraOptions = _useState18[0],
+    setCameraOptions = _useState18[1]; // Camera source list
+
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState20 = _slicedToArray(_useState19, 2),
+    pressStartButton = _useState20[0],
+    setPressStartButton = _useState20[1];
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    (0,_utils_functions__WEBPACK_IMPORTED_MODULE_3__.sendDatatoForeGround)({
+      type: _utils_constants__WEBPACK_IMPORTED_MODULE_2__.EVENT.FOREGROUND_VISIBLE,
+      data: true
+    });
+    return function () {
+      (0,_utils_functions__WEBPACK_IMPORTED_MODULE_3__.sendDatatoForeGround)({
+        type: _utils_constants__WEBPACK_IMPORTED_MODULE_2__.EVENT.FOREGROUND_VISIBLE,
+        data: false
+      });
+    };
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     chrome.storage.sync.get("CAMERA_ALLOWED", function (result) {
       if (chrome.runtime.lastError) {
@@ -20068,6 +20090,50 @@ function Popup() {
         setRecordingStarted(result.RECORDING_STARTED);
       }
     });
+    chrome.storage.sync.get("RECORDING_MODE", function (result) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+      } else {
+        if ((0,_utils_functions__WEBPACK_IMPORTED_MODULE_3__.isEmpty)(result.RECORDING_MODE)) {
+          setRecordingMode(0);
+        } else {
+          setRecordingMode(result.RECORDING_MODE);
+        }
+      }
+    });
+    chrome.storage.sync.get("QUALITY_VALUE", function (result) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+      } else {
+        if ((0,_utils_functions__WEBPACK_IMPORTED_MODULE_3__.isEmpty)(result.QUALITY_VALUE)) {
+          setQualityDefaultValue("3000000");
+        } else {
+          setQualityDefaultValue(result.QUALITY_VALUE);
+        }
+      }
+    });
+    chrome.storage.sync.get("CAMERA_SOURCE", function (result) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+      } else {
+        if ((0,_utils_functions__WEBPACK_IMPORTED_MODULE_3__.isEmpty)(result.CAMERA_SOURCE)) {
+          setCameraSource("Disabled");
+        } else {
+          setCameraSource(result.CAMERA_SOURCE);
+        }
+      }
+    });
+    chrome.storage.sync.get("MIC_SOURCE", function (result) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+      } else {
+        if ((0,_utils_functions__WEBPACK_IMPORTED_MODULE_3__.isEmpty)(result.MIC_SOURCE)) {
+          setMicSource("Disabled");
+        } else {
+          setMicSource(result.MIC_SOURCE);
+        }
+      }
+    });
     var storageListener = function storageListener(changes, areaName) {
       if (areaName !== "sync") return;
       if (changes.CAMERA_ALLOWED) {
@@ -20084,6 +20150,18 @@ function Popup() {
       }
       if (changes.RECORDING_STARTED) {
         setRecordingStarted(changes.RECORDING_STARTED.newValue);
+      }
+      if (changes.RECORDING_MODE) {
+        setRecordingMode(changes.RECORDING_MODE.newValue);
+      }
+      if (changes.QUALITY_VALUE) {
+        setQualityDefaultValue(changes.QUALITY_VALUE.newValue);
+      }
+      if (changes.CAMERA_SOURCE) {
+        setCameraSource(changes.CAMERA_SOURCE.newValue);
+      }
+      if (changes.MIC_SOURCE) {
+        setMicSource(changes.MIC_SOURCE.newValue);
       }
     };
     chrome.storage.onChanged.addListener(storageListener);
@@ -20111,15 +20189,6 @@ function Popup() {
       });
     }
   }, [cameraSource, cameraAllowed]);
-
-  // Pausing and Resuming
-  var onPauseResume = function onPauseResume() {
-    if (mediaRecorder.state === "recording") {
-      mediaRecorder.pause();
-    } else if (mediaRecorder.state === "paused") {
-      mediaRecorder.resume();
-    }
-  };
   var onClickRecordingStartOrStop = function onClickRecordingStartOrStop() {
     (0,_utils_functions__WEBPACK_IMPORTED_MODULE_3__.sendDatatoForeGround)({
       type: _utils_constants__WEBPACK_IMPORTED_MODULE_2__.EVENT.PRESS_START_BUTTON,
@@ -20132,6 +20201,7 @@ function Popup() {
       type: _utils_constants__WEBPACK_IMPORTED_MODULE_2__.EVENT.RECORDING_MODE,
       data: value
     });
+    chrome.storage.sync.set(_defineProperty({}, "RECORDING_MODE", value));
   };
   var onChangeCameraSource = function onChangeCameraSource(value) {
     if (value === "Disabled") {
@@ -20140,12 +20210,14 @@ function Popup() {
         type: _utils_constants__WEBPACK_IMPORTED_MODULE_2__.EVENT.CAMERA_SOURCE,
         data: "Disabled"
       });
+      chrome.storage.sync.set(_defineProperty({}, "CAMERA_SOURCE", "Disabled"));
     } else {
       setCameraSource(value);
       (0,_utils_functions__WEBPACK_IMPORTED_MODULE_3__.sendDatatoForeGround)({
         type: _utils_constants__WEBPACK_IMPORTED_MODULE_2__.EVENT.CAMERA_SOURCE,
         data: value
       });
+      chrome.storage.sync.set(_defineProperty({}, "CAMERA_SOURCE", value));
     }
   };
   var onChangeMicrophoneSource = function onChangeMicrophoneSource(value) {
@@ -20154,11 +20226,13 @@ function Popup() {
         type: _utils_constants__WEBPACK_IMPORTED_MODULE_2__.EVENT.MIC_SOURCE,
         data: "Disabled"
       });
+      chrome.storage.sync.set(_defineProperty({}, "MIC_SOURCE", "Disabled"));
     } else {
       (0,_utils_functions__WEBPACK_IMPORTED_MODULE_3__.sendDatatoForeGround)({
         type: _utils_constants__WEBPACK_IMPORTED_MODULE_2__.EVENT.MIC_SOURCE,
         data: value
       });
+      chrome.storage.sync.set(_defineProperty({}, "MIC_SOURCE", value));
     }
   };
   var onQualityDefaultValue = function onQualityDefaultValue(value) {
@@ -20167,6 +20241,7 @@ function Popup() {
       type: _utils_constants__WEBPACK_IMPORTED_MODULE_2__.EVENT.QUALITY_VALUE,
       data: value
     });
+    chrome.storage.sync.set(_defineProperty({}, "QUALITY_VALUE", value));
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "w-[425px] border-[#a1a0a0] border-2 rounded-lg p-7 mx-auto"
@@ -20189,6 +20264,7 @@ function Popup() {
     label: _utils_constants__WEBPACK_IMPORTED_MODULE_2__.LABEL.CAMERA,
     options: cameraOptions,
     allowed: cameraAllowed,
+    value: cameraSource,
     onChangeDeviceSource: function onChangeDeviceSource(value) {
       return onChangeCameraSource(value);
     }
@@ -20196,6 +20272,7 @@ function Popup() {
     label: _utils_constants__WEBPACK_IMPORTED_MODULE_2__.LABEL.MICROPHONE,
     options: microphoneOptions,
     allowed: microphoneAllowed,
+    value: micSource,
     onChangeDeviceSource: function onChangeDeviceSource(value) {
       return onChangeMicrophoneSource(value);
     }
@@ -20354,7 +20431,8 @@ var EVENT = {
   RECORDING_MODE: "recordingMode",
   CAMERA_SOURCE: "cameraSource",
   QUALITY_VALUE: "qualityValue",
-  MIC_SOURCE: "micSource"
+  MIC_SOURCE: "micSource",
+  FOREGROUND_VISIBLE: "foregroundVisible"
 };
 
 /***/ }),

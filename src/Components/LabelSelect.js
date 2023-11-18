@@ -6,7 +6,7 @@ import {
 import { Select } from "antd";
 
 const LabelSelect = (props) => {
-  const { label, options, allowed, onChangeDeviceSource } = props;
+  const { label, options, allowed, value, onChangeDeviceSource } = props;
   return (
     <>
       <p className="mt-5 text-start font-bold">{label}</p>
@@ -17,6 +17,7 @@ const LabelSelect = (props) => {
         options={options}
         className="mt-2 w-full h-[40px]"
         disabled={!allowed}
+        value={value}
       />
       {allowed ? (
         <p className="mt-1 text-start text-[#31a15c]">

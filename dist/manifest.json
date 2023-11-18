@@ -19,11 +19,7 @@
   ],
   "host_permissions": ["<all_urls>"],
   "action": {
-    "default_popup": "popup.html",
-    "type": "redirect",
-    "redirect": {
-      "url": "https://developer.chrome.com/docs/extensions/mv3/intro/"
-    }
+    "default_popup": "popup.html"
   },
   "icons": {
     "16": "./obj-16x16.png",
@@ -32,8 +28,5 @@
     "128": "./obj-128x128.png"
   },
   "description": "Screen Recorder",
-  "options_ui": "./options.html",
-  "content_security_policy": {
-    "extension_pages": "default-src 'self'"
-  }
+  "options_page": "./options.html"
 }
