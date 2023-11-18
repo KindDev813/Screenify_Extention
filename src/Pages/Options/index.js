@@ -18,195 +18,216 @@ import {
   alertModal,
 } from "../../utils/functions";
 
-const ffmpeg = createFFmpeg({ log: false });
+const ffmpeg = createFFmpeg({ log: true });
 
 function Options() {
-  // const [limitMinTrimValue, setlimitMinTrimValue] = useState(0);
-  // const [limitMaxTrimValue, setlimitMaxTrimValue] = useState(100);
-  // const [localVideoLink, setLocalVideoLink] = useState("");
-  // const [loadingVisible, setLoadingVisible] = useState(true);
-  // const [currentTool, setCurrentTool] = useState(LABEL.TRIM);
-  // const [overMusic, setOverMusic] = useState(null);
-  // const [cropDimensions, setCropDimensions] = useState();
-  // const [origDimensions, setOrigDimensions] = useState({});
-  // const [maxTime, setMaxTime] = useState([]);
-  // const [timeRangeBgImages, setTimeRangeBgImages] = useState([]);
+  const [limitMinTrimValue, setlimitMinTrimValue] = useState(0);
+  const [limitMaxTrimValue, setlimitMaxTrimValue] = useState(100);
+  const [localVideoLink, setLocalVideoLink] = useState("");
+  const [loadingVisible, setLoadingVisible] = useState(true);
+  const [currentTool, setCurrentTool] = useState(LABEL.TRIM);
+  const [overMusic, setOverMusic] = useState(null);
+  const [cropDimensions, setCropDimensions] = useState();
+  const [origDimensions, setOrigDimensions] = useState({});
+  const [maxTime, setMaxTime] = useState([]);
+  const [timeRangeBgImages, setTimeRangeBgImages] = useState([]);
 
-  // useEffect(() => {
-  //   ffmpeg
-  //     .load()
-  //     .then(() => {
-  //       setLoadingVisible(false);
-  //     })
-  //     .catch((error) => {
-  //       alertModal("Please reload the editting page!");
-  //     });
+  useEffect(() => {
+    ffmpeg
+      .load()
+      .then(() => {
+        setLoadingVisible(false);
+      })
+      .catch((error) => {
+        alertModal("Please reload the editting page!");
+      });
 
-  //   let links = JSON.parse(localStorage.getItem(LOCAL_STORAGE.BLOB_LINKS));
-  //   links ? setLocalVideoLink(links) : setLocalVideoLink();
-  // }, []);
+    chrome.storage.sync.get("BLOB_LINK", function (result) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+      } else {
+        result.BLOB_LINK
+          ? setLocalVideoLink(result.BLOB_LINK)
+          : setLocalVideoLink();
+      }
+    });
 
-  // useEffect(() => {
-  //   if (localVideoLink) {
-  //     getVideoDimensions(localVideoLink)
-  //       .then(({ width, height }) => {
-  //         setOrigDimensions({ width: width, height: height });
-  //       })
-  //       .catch((error) => {
-  //         console.log(`Error occurred: ${error}`);
-  //       });
-  //   }
-  // }, [localVideoLink]);
+    const storageListener = (changes, areaName) => {
+      if (areaName !== "sync") return;
+      if (changes.BLOB_LINK) {
+        setLocalVideoLink(changes.BLOB_LINK.newValue);
+      }
+    };
 
-  // useEffect(() => {
-  //   const getImages = async () => {
-  //     if (localVideoLink && !loadingVisible) {
-  //       let fileName = new Date().getTime();
-  //       let imageLinks = await extractImagesFFmpeg(
-  //         ffmpeg,
-  //         localVideoLink,
-  //         maxTime,
-  //         fileName
-  //       );
-  //       setTimeRangeBgImages(imageLinks);
-  //       setLoadingVisible(false);
-  //     }
-  //   };
+    chrome.storage.onChanged.addListener(storageListener);
 
-  //   getImages();
-  // }, [localVideoLink, loadingVisible]);
+    return () => {
+      chrome.storage.onChanged.removeListener(storageListener);
+    };
+  }, []);
 
-  // const onSaveAndDownload = async () => {
-  //   setLoadingVisible(true);
-  //   let fileName = new Date().getTime();
-  //   let downUrl;
+  useEffect(() => {
+    if (localVideoLink) {
+      getVideoDimensions(localVideoLink)
+        .then(({ width, height }) => {
+          setOrigDimensions({ width: width, height: height });
+        })
+        .catch((error) => {
+          console.log(`Error occurred: ${error}`);
+        });
+    }
+  }, [localVideoLink]);
 
-  //   switch (currentTool) {
-  //     case LABEL.TRIM:
-  //       downUrl = await trimModeDown(fileName);
-  //       break;
-  //     case LABEL.CROP:
-  //       downUrl = await cropModeDown(fileName);
-  //       break;
-  //     case LABEL.BGMUSIC:
-  //       downUrl = await musicOverModeDown(fileName);
-  //       break;
-  //   }
+  console.log("object~~~~~~~~~~~~~~~", localVideoLink);
 
-  //   const a = document.createElement("a");
-  //   a.href = downUrl;
-  //   a.download = `${fileName}.mp4`;
-  //   setLoadingVisible(false);
-  //   a.click();
-  // };
+  useEffect(() => {
+    const getImages = async () => {
+      if (localVideoLink && !loadingVisible) {
+        let fileName = new Date().getTime();
+        let imageLinks = await extractImagesFFmpeg(
+          ffmpeg,
+          localVideoLink,
+          maxTime,
+          fileName
+        );
+        setTimeRangeBgImages(imageLinks);
+        setLoadingVisible(false);
+      }
+    };
 
-  // const onBack = () => {
-  //   URL.revokeObjectURL(localVideoLink);
-  //   navigate("/");
-  // };
+    getImages();
+  }, [localVideoLink, loadingVisible]);
 
-  // const trimModeDown = async (fileName) => {
-  //   let url = await trimVideoFFmpeg(
-  //     ffmpeg,
-  //     fileName,
-  //     localVideoLink,
-  //     (maxTime / 100) * limitMinTrimValue,
-  //     (maxTime / 100) * limitMaxTrimValue
-  //   );
+  const onSaveAndDownload = async () => {
+    setLoadingVisible(true);
+    let fileName = new Date().getTime();
+    let downUrl;
 
-  //   return url;
-  // };
+    switch (currentTool) {
+      case LABEL.TRIM:
+        downUrl = await trimModeDown(fileName);
+        break;
+      case LABEL.CROP:
+        downUrl = await cropModeDown(fileName);
+        break;
+      case LABEL.BGMUSIC:
+        downUrl = await musicOverModeDown(fileName);
+        break;
+    }
 
-  // const cropModeDown = async (fileName) => {
-  //   let url = await cropVideoFFmpeg(
-  //     ffmpeg,
-  //     fileName,
-  //     localVideoLink,
-  //     cropDimensions,
-  //     origDimensions
-  //   );
+    const a = document.createElement("a");
+    a.href = downUrl;
+    a.download = `${fileName}.mp4`;
+    setLoadingVisible(false);
+    a.click();
+  };
 
-  //   return url;
-  // };
+  const onBack = () => {
+    URL.revokeObjectURL(localVideoLink);
+    navigate("/");
+  };
 
-  // const musicOverModeDown = async (fileName) => {
-  //   let url = await musicOverFFmpeg(
-  //     ffmpeg,
-  //     fileName,
-  //     localVideoLink,
-  //     overMusic
-  //   );
+  const trimModeDown = async (fileName) => {
+    let url = await trimVideoFFmpeg(
+      ffmpeg,
+      fileName,
+      localVideoLink,
+      (maxTime / 100) * limitMinTrimValue,
+      (maxTime / 100) * limitMaxTrimValue
+    );
 
-  //   return url;
-  // };
+    return url;
+  };
+
+  const cropModeDown = async (fileName) => {
+    let url = await cropVideoFFmpeg(
+      ffmpeg,
+      fileName,
+      localVideoLink,
+      cropDimensions,
+      origDimensions
+    );
+
+    return url;
+  };
+
+  const musicOverModeDown = async (fileName) => {
+    let url = await musicOverFFmpeg(
+      ffmpeg,
+      fileName,
+      localVideoLink,
+      overMusic
+    );
+
+    return url;
+  };
 
   return (
-    <div>Hello World!</div>
-    // <Spin spinning={loadingVisible} size="large" delay={500}>
-    //   <div className="grid grid-cols-7 gap-4  w-full h-screen p-4 max-w-[70%] mx-auto">
-    //     <EditToolMenu
-    //       handleCurrentTool={(value) => setCurrentTool(value)}
-    //       currentTool={currentTool}
-    //     />
+    <Spin spinning={loadingVisible} size="large" delay={500}>
+      <div className="grid grid-cols-7 gap-4  w-full h-screen p-4 max-w-[70%] mx-auto">
+        <EditToolMenu
+          handleCurrentTool={(value) => setCurrentTool(value)}
+          currentTool={currentTool}
+        />
 
-    //     <div className="col-span-6 flex flex-col justify-evenly h-full my-auto p-4 border-2 border-[#00000057] rounded-lg">
-    //       <div className="flex justify-between p-4">
-    //         <Button
-    //           type="primary"
-    //           shape="round"
-    //           onClick={() => {
-    //             onBack();
-    //           }}
-    //         >
-    //           Back
-    //         </Button>
+        <div className="col-span-6 flex flex-col justify-evenly h-full my-auto p-4 border-2 border-[#00000057] rounded-lg">
+          <div className="flex justify-between p-4">
+            <Button
+              type="primary"
+              shape="round"
+              onClick={() => {
+                onBack();
+              }}
+            >
+              Back
+            </Button>
 
-    //         <Button
-    //           type="primary"
-    //           shape="round"
-    //           onClick={() => {
-    //             onSaveAndDownload();
-    //           }}
-    //         >
-    //           Done
-    //         </Button>
-    //       </div>
+            <Button
+              type="primary"
+              shape="round"
+              onClick={() => {
+                onSaveAndDownload();
+              }}
+            >
+              Done
+            </Button>
+          </div>
 
-    //       <VideoPlayer
-    //         localVideoLink={localVideoLink}
-    //         currentTool={currentTool}
-    //         limitMinTrimValue={(maxTime / 100) * limitMinTrimValue}
-    //         limitMaxTrimValue={(maxTime / 100) * limitMaxTrimValue}
-    //         handleCropDimensionsData={(value) => setCropDimensions(value)}
-    //       />
+          <VideoPlayer
+            localVideoLink={localVideoLink}
+            currentTool={currentTool}
+            limitMinTrimValue={(maxTime / 100) * limitMinTrimValue}
+            limitMaxTrimValue={(maxTime / 100) * limitMaxTrimValue}
+            handleCropDimensionsData={(value) => setCropDimensions(value)}
+          />
 
-    //       {currentTool === LABEL.TRIM && (
-    //         <TimeRange
-    //           error={false}
-    //           ticksNumber={20}
-    //           localVideoLink={localVideoLink}
-    //           backgroundImages={timeRangeBgImages}
-    //           selectedInterval={[0, 100]}
-    //           onUpdateCallback={(value) => {
-    //             setlimitMinTrimValue(value[0]);
-    //             setlimitMaxTrimValue(value[1]);
-    //           }}
-    //           maxTime={maxTime}
-    //           handleMaxTime={(value) => setMaxTime(value)}
-    //           step={100 / maxTime}
-    //           limitMinTrimValue={limitMinTrimValue}
-    //           limitMaxTrimValue={limitMaxTrimValue}
-    //         />
-    //       )}
-    //       {currentTool === LABEL.BGMUSIC && (
-    //         <BgMusicOverControl
-    //           overMusic={overMusic}
-    //           handleOverMusic={(value) => setOverMusic(value)}
-    //         />
-    //       )}
-    //     </div>
-    //   </div>
-    // </Spin>
+          {currentTool === LABEL.TRIM && (
+            <TimeRange
+              error={false}
+              ticksNumber={20}
+              localVideoLink={localVideoLink}
+              backgroundImages={timeRangeBgImages}
+              selectedInterval={[0, 100]}
+              onUpdateCallback={(value) => {
+                setlimitMinTrimValue(value[0]);
+                setlimitMaxTrimValue(value[1]);
+              }}
+              maxTime={maxTime}
+              handleMaxTime={(value) => setMaxTime(value)}
+              step={100 / maxTime}
+              limitMinTrimValue={limitMinTrimValue}
+              limitMaxTrimValue={limitMaxTrimValue}
+            />
+          )}
+          {currentTool === LABEL.BGMUSIC && (
+            <BgMusicOverControl
+              overMusic={overMusic}
+              handleOverMusic={(value) => setOverMusic(value)}
+            />
+          )}
+        </div>
+      </div>
+    </Spin>
   );
 }
 

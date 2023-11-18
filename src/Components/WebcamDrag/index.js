@@ -55,7 +55,7 @@ const WebcamDrag = (props) => {
               {XCOUNTERS.map((xCounter) => {
                 return (
                   <Button
-                    className="text-white mr-2 font-bold border-2 border-[#1677ff]"
+                    className="bg-blue-600 text-white mr-2 font-bold border-2 border-[#1677ff]"
                     type="primary"
                     shape="circle"
                     key={xCounter}
