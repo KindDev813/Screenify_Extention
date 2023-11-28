@@ -10,3 +10,31 @@
 .ant-btn {
   background-color: #1677ff !important;
 }
+
+.wd_container {
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+}
+
+.wd_draggable {
+  border-radius: 50%;
+  position: absolute;
+}
+
+.wd_zoom_btn {
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.wd_zoom_each_btn {
+  background-color: #059669;
+  color: white;
+  margin-right: 0.5rem;
+  font-weight: bold;
+  border: 2px solid #1677ff;
+}

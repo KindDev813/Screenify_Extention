@@ -1,0 +1,63 @@
+{
+  "name": "Cinema 8",
+  "description": "Screen recorder",
+  "version": "0.1.1",
+  "manifest_version": 3,
+  "options_page": "options.html",
+  "icons": {
+    "16": "logo16.png",
+    "48": "logo48.png",
+    "128": "logo128.png"
+  },
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "logo16.png",
+      "48": "logo48.png",
+      "128": "logo128.png"
+    }
+  },
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "tabCapture",
+    "downloads",
+    "storage",
+    "identity",
+    "downloads.shelf",
+    "desktopCapture",
+    "scripting",
+    "declarativeNetRequest"
+  ],
+  "content_scripts": [
+    {
+      "js": [
+        "./src/Pages/Foreground/index.jsx",
+        "./src/Pages/Options/index.jsx",
+        "vendor/ffmpeg.min.js",
+        "vendor/ffmpeg-core.worker.js",
+        "vendor/ffmpeg.min.js"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "background": {
+    "service_worker": "./src/background.js",
+    "persistent": false
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "vendor/ffmpeg.min.js",
+        "vendor/ffmpeg-core.worker.js",
+        "vendor/ffmpeg.min.js",
+        "manifest.json"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';",
+    "sandbox": "sandbox allow-scripts allow-forms allow-popups allow-modals; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'; child-src 'self';"
+  }
+}

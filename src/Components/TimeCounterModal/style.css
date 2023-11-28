@@ -1,5 +1,16 @@
-:where(.css-1adbn6x).ant-modal .ant-modal-content {
+.time_counter_modal .ant-modal-content {
   background: transparent !important;
   box-shadow: none !important;
-  border-radius: 100% !important;
+}
+
+.tcm_word {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-top: auto;
+  margin-bottom: auto;
+  font-style: normal;
+  font-weight: bold;
+  background-color: transparent;
+  font-size: 150px;
 }

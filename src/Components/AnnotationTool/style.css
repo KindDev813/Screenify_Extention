@@ -6,3 +6,22 @@
   width: 15px !important;
   height: 15px !important;
 }
+
+.apf_container {
+  position: fixed;
+  z-index: 49;
+}
+
+.at_container {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.sp_container {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  padding: 0.25rem;
+  align-items: center;
+}
