@@ -1,13 +1,13 @@
 import React from "react";
 import { Modal } from "antd";
-import { fetchFile } from "@ffmpeg/ffmpeg";
 
 export const trimVideoFFmpeg = async (
   ffmpeg,
   fileName,
   link,
   minTime,
-  maxTime
+  maxTime,
+  fetchFile
 ) => {
   try {
     await ffmpeg.FS(
@@ -44,7 +44,8 @@ export const cropVideoFFmpeg = async (
   fileName,
   link,
   cropDimensions,
-  origDimensions
+  origDimensions,
+  fetchFile
 ) => {
   let width = cropDimensions.width * origDimensions.width;
   let height = cropDimensions.height * origDimensions.height;
@@ -80,7 +81,13 @@ export const cropVideoFFmpeg = async (
   }
 };
 
-export const musicOverFFmpeg = async (ffmpeg, fileName, link, overMusic) => {
+export const musicOverFFmpeg = async (
+  ffmpeg,
+  fileName,
+  link,
+  overMusic,
+  fetchFile
+) => {
   try {
     await ffmpeg.FS(
       "writeFile",
@@ -148,7 +155,13 @@ export const getVideoDimensions = async (blobUrl) => {
   });
 };
 
-export const extractImagesFFmpeg = async (ffmpeg, link, maxTime, fileName) => {
+export const extractImagesFFmpeg = async (
+  ffmpeg,
+  link,
+  maxTime,
+  fileName,
+  fetchFile
+) => {
   let imageLinks = [];
   try {
     await ffmpeg.FS(

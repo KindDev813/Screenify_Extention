@@ -1,3 +1,62 @@
+:where(.css-dev-only-do-not-override-pr0fja).ant-float-btn-default
+  .ant-float-btn-body:hover {
+  background-color: white;
+  opacity: 0.9;
+}
+
 .ant-btn-primary {
   background-color: #1677ff !important;
+}
+
+.pa_container {
+  width: 365px;
+  border: 2px solid #a1a0a0;
+  border-radius: 8px;
+  padding: 28px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.pa_radio_icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.pa_radio_label {
+  font-size: 12px;
+  white-space: nowrap;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.pa_quality_label {
+  margin-top: 1.25rem;
+  text-align: start;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.pa_quality_btn {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  margin-left: 2.5rem;
+  margin-right: 2.5rem;
+}
+
+.pa_recording_start_btn {
+  font-size: 15px;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.pa_model_label {
+  font-size: 30px;
+  margin-right: auto;
+  margin-left: auto;
 }

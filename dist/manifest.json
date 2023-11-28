@@ -1,9 +1,21 @@
 {
   "name": "Cinema 8",
-  "version": "0.1.0",
+  "description": "Screen recorder",
+  "version": "0.1.1",
   "manifest_version": 3,
-  "background": {
-    "service_worker": "./background.js"
+  "options_page": "options.html",
+  "icons": {
+    "16": "logo16.png",
+    "48": "logo48.png",
+    "128": "logo128.png"
+  },
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "logo16.png",
+      "48": "logo48.png",
+      "128": "logo128.png"
+    }
   },
   "permissions": [
     "tabs",
@@ -17,18 +29,57 @@
     "scripting",
     "declarativeNetRequest"
   ],
-  "host_permissions": ["<all_urls>"],
-  "action": {
-    "default_popup": "popup.html"
+  "content_scripts": [
+    {
+      "js": [
+        "assets/content-script-loader.index.jsx.1dcd6ead.9bd15d71.js",
+        "assets/content-script-loader.index.jsx.f42b0fec.00ac80c8.js",
+        "assets/content-script-loader.ffmpeg.min.js.a24d4563.12de9cb0.js",
+        "assets/content-script-loader.ffmpeg-core.worker.js.95c3f829.67dabf4a.js",
+        "assets/content-script-loader.ffmpeg.min.js.a24d4563.12de9cb0.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ],
+      "css": [
+        "assets/index.85454411.css",
+        "assets/index.c19a59b1.css"
+      ]
+    }
+  ],
+  "background": {
+    "service_worker": "service-worker-loader.js",
+    "type": "module"
   },
-  "icons": {
-    "16": "./obj-16x16.png",
-    "32": "./obj-32x32.png",
-    "48": "./obj-48x48.png",
-    "128": "./obj-128x128.png"
-  },
-  "description": "Screen Recorder",
-  "options_page": "./options.html",
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "resources": [
+        "vendor/ffmpeg.min.js",
+        "vendor/ffmpeg-core.worker.js",
+        "manifest.json"
+      ],
+      "use_dynamic_url": false
+    },
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "resources": [
+        "assets/functions.246a5f15.js",
+        "assets/index.esm.852f525b.js",
+        "assets/index.a7626ac1.js",
+        "assets/index.jsx.1dcd6ead.js",
+        "assets/index.b2a136f5.js",
+        "assets/index.jsx.f42b0fec.js",
+        "assets/ffmpeg.min.js.a24d4563.js",
+        "assets/ffmpeg-core.worker.js.95c3f829.js"
+      ],
+      "use_dynamic_url": true
+    }
+  ],
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';",
     "sandbox": "sandbox allow-scripts allow-forms allow-popups allow-modals; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'; child-src 'self';"
