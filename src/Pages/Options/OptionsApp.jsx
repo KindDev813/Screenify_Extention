@@ -20,8 +20,9 @@ import "./style.css";
 
 const { createFFmpeg, fetchFile } = FFmpeg;
 const ffmpeg = createFFmpeg({
-  log: true,
   corePath: chrome.runtime.getURL("vendor/ffmpeg-core.js"),
+  log: true,
+  mainName: "main",
 });
 
 function OptionsApp() {
