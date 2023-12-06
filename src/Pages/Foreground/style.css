@@ -10,3 +10,8 @@
   position: fixed;
   z-index: 50;
 }
+
+#foreground-root {
+  position: fixed;
+  z-index: 999;
+}

@@ -34,8 +34,7 @@
       "js": [
         "./src/Pages/Foreground/index.jsx",
         "./src/Pages/Options/index.jsx",
-        "vendor/ffmpeg.min.js",
-        "vendor/ffmpeg-core.worker.js",
+        "vendor/ffmpeg-core.js",
         "vendor/ffmpeg.min.js"
       ],
       "matches": ["<all_urls>"]
@@ -47,12 +46,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": [
-        "vendor/ffmpeg.min.js",
-        "vendor/ffmpeg-core.worker.js",
-        "vendor/ffmpeg.min.js",
-        "manifest.json"
-      ],
+      "resources": ["vendor/*"],
       "matches": ["<all_urls>"]
     }
   ],

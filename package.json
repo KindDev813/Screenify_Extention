@@ -14,8 +14,6 @@
   "dependencies": {
     "@ant-design/icons": "5.2.6",
     "@crxjs/vite-plugin": "^1.0.14",
-    "@ffmpeg/core": "0.11.0",
-    "@ffmpeg/ffmpeg": "0.11.5",
     "antd": "5.11.0",
     "d3-scale": "4.0.2",
     "date-fns": "2.30.0",
