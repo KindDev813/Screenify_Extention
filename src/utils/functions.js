@@ -169,18 +169,26 @@ export const extractImagesFFmpeg = async (
       `input_${fileName}.mp4`,
       await fetchFile(link)
     );
+    let timeIntervals, previews;
     // ffmpeg -i BBB.mp4 -filter_complex "fps=1/79" ou_%03d.png
+    if (maxTime >= 8) {
+      timeIntervals = 1 / Math.floor(maxTime / 8);
+      previews = 8;
+    } else {
+      timeIntervals = 1;
+      previews = parseInt(maxTime);
+    }
     await ffmpeg.run(
       "-i",
       `input_${fileName}.mp4`,
       "-filter_complex",
-      `fps=1/${Math.floor(maxTime / 8)}`,
+      `fps=${timeIntervals}`,
       "-preset",
       "ultrafast",
       `${fileName}_%01d.png`
     );
 
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < previews; i++) {
       let data = ffmpeg.FS("readFile", `${fileName}_${i + 1}.png`);
       let downUrl = URL.createObjectURL(
         new Blob([data.buffer], { type: "image/png" })

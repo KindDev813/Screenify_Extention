@@ -29,7 +29,7 @@ const TimeRange = (props) => {
           console.error(chrome.runtime.lastError);
         } else {
           result.RECORDING_DURATION
-            ? handleMaxTime(result.RECORDING_DURATION / 1000)
+            ? handleMaxTime(Math.floor(result.RECORDING_DURATION / 1000))
             : handleMaxTime();
         }
       });
