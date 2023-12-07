@@ -62,6 +62,7 @@ function ForegroundApp() {
           setForegroundVisible(request.data);
           break;
       }
+      sendResponse({ SUCCESS: "success" });
     };
 
     chrome.runtime.onMessage.addListener(messageListener);
@@ -236,9 +237,14 @@ function ForegroundApp() {
       temp.unshift({ label: "Disabled", value: "Disabled" });
       chrome.storage.sync.set({ ["CAMERA_OPTIONS"]: temp });
     } else {
-      chrome.runtime.sendMessage({
-        [EVENT.CAMERA_OPTIONS]: [{ label: "Disabled", value: "Disabled" }],
-      });
+      chrome.runtime.sendMessage(
+        {
+          [EVENT.CAMERA_OPTIONS]: [{ label: "Disabled", value: "Disabled" }],
+        },
+        function (response) {
+          console.log(response.SUCCESS);
+        }
+      );
     }
 
     if (!isEmpty(audioDevices)) {
@@ -248,9 +254,14 @@ function ForegroundApp() {
       temp.unshift({ label: "Disabled", value: "Disabled" });
       chrome.storage.sync.set({ ["MIC_OPTIONS"]: temp });
     } else {
-      chrome.runtime.sendMessage({
-        [EVENT.MIC_OPTIONS]: [{ label: "Disabled", value: "Disabled" }],
-      });
+      chrome.runtime.sendMessage(
+        {
+          [EVENT.MIC_OPTIONS]: [{ label: "Disabled", value: "Disabled" }],
+        },
+        function (response) {
+          console.log(response.SUCCESS);
+        }
+      );
     }
   };
 
@@ -290,6 +301,7 @@ function ForegroundApp() {
                 : "browser",
           },
           audio: true,
+          selfBrowserSurface: "include",
         });
 
         if (screenStream.getAudioTracks()[0]) {
@@ -357,10 +369,15 @@ function ForegroundApp() {
           ).toString(),
         });
 
-        chrome.runtime.sendMessage({
-          action: "createOptionPage",
-          url: chrome.runtime.getURL("options.html"),
-        });
+        chrome.runtime.sendMessage(
+          {
+            action: "createOptionPage",
+            url: chrome.runtime.getURL("options.html"),
+          },
+          function (response) {
+            console.log(response.SUCCESS);
+          }
+        );
 
         stream.getTracks().forEach((element) => {
           element.stop();
