@@ -3,7 +3,7 @@ import WebcamDrag from "../../Components/WebcamDrag";
 import TimeCounterModal from "../../Components/TimeCounterModal";
 import AnnotationTool from "../../Components/AnnotationTool";
 
-import { alertModal, isEmpty } from "../../utils/functions";
+import { alertModal, isEmpty, sendDatatoAllData } from "../../utils/functions";
 import { EVENT } from "../../utils/constants";
 import "./style.css";
 
@@ -44,7 +44,15 @@ function ForegroundApp() {
           setPressStartButton(request.data);
           break;
         case EVENT.VISIBLE_WEBCAM_DRAG:
-          setVisibleWebcamDrag(request.data);
+          let webcamData =
+            JSON.parse(localStorage.getItem(EVENT.VISIBLE_WEBCAM_DRAG)) || "";
+
+          console.log(webcamData, "~~~~~~~~~~~~~webcamData");
+
+          // setVisibleWebcamDrag(
+          //   JSON.parse(localStorage.getItem(EVENT.VISIBLE_WEBCAM_DRAG)).data
+          // );
+          // setVisibleWebcamDrag(request.data);
           break;
         case EVENT.RECORDING_MODE:
           setRecordingMode(request.data);
@@ -343,9 +351,9 @@ function ForegroundApp() {
           setVisibleTimeCounterModal(true);
         } else {
           onCloseModalStartRecording();
-          setVisibleEditMenu(true);
           setRecordingStarted(true);
           chrome.storage.sync.set({ ["RECORDING_STARTED"]: true });
+          setVisibleEditMenu(true);
         }
       }
     } catch (error) {

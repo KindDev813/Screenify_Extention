@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal } from "antd";
+import { EVENT } from "./constants";
 
 export const trimVideoFFmpeg = async (
   ffmpeg,
@@ -227,5 +228,20 @@ export const sendDatatoForeGround = (value) => {
         console.log(response.status);
       }
     });
+  });
+};
+
+export const sendDatatoAllData = (value) => {
+  chrome.tabs.query({}, function (tabs) {
+    localStorage.setItem(EVENT.VISIBLE_WEBCAM_DRAG, JSON.stringify(value));
+    for (var i = 0; i < tabs.length; ++i) {
+      chrome.tabs.sendMessage(tabs[i].id, value, function (response) {
+        if (chrome.runtime.lastError) {
+          console.error(chrome.runtime.lastError.message);
+        } else {
+          console.log(response.status);
+        }
+      });
+    }
   });
 };
