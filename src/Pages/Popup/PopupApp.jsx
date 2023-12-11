@@ -9,7 +9,11 @@ import {
 
 import LabelSelect from "../../Components/LabelSelect";
 import { QUALITYOPTIONS, LABEL, EVENT } from "../../utils/constants";
-import { isEmpty, sendDatatoForeGround } from "../../utils/functions";
+import {
+  isEmpty,
+  sendDatatoForeGround,
+  sendDatatoAllData,
+} from "../../utils/functions";
 import "./style.css";
 
 const modeLabels = [
@@ -190,12 +194,12 @@ function PopupApp() {
   useEffect(() => {
     if (cameraAllowed) {
       if (cameraSource === "Disabled") {
-        sendDatatoForeGround({ type: EVENT.VISIBLE_WEBCAM_DRAG, data: false });
+        chrome.storage.sync.set({ ["VISIBLE_WEBCAM_DRAG"]: false });
       } else {
-        sendDatatoForeGround({ type: EVENT.VISIBLE_WEBCAM_DRAG, data: true });
+        chrome.storage.sync.set({ ["VISIBLE_WEBCAM_DRAG"]: true });
       }
     } else {
-      sendDatatoForeGround({ type: EVENT.VISIBLE_WEBCAM_DRAG, data: false });
+      chrome.storage.sync.set({ ["VISIBLE_WEBCAM_DRAG"]: false });
     }
   }, [cameraSource, cameraAllowed]);
 

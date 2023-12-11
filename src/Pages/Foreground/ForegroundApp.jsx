@@ -3,7 +3,7 @@ import WebcamDrag from "../../Components/WebcamDrag";
 import TimeCounterModal from "../../Components/TimeCounterModal";
 import AnnotationTool from "../../Components/AnnotationTool";
 
-import { alertModal, isEmpty } from "../../utils/functions";
+import { alertModal, isEmpty, sendDatatoAllData } from "../../utils/functions";
 import { EVENT } from "../../utils/constants";
 import "./style.css";
 
@@ -43,9 +43,6 @@ function ForegroundApp() {
         case EVENT.PRESS_START_BUTTON:
           setPressStartButton(request.data);
           break;
-        case EVENT.VISIBLE_WEBCAM_DRAG:
-          setVisibleWebcamDrag(request.data);
-          break;
         case EVENT.RECORDING_MODE:
           setRecordingMode(request.data);
           break;
@@ -65,9 +62,42 @@ function ForegroundApp() {
       sendResponse({ SUCCESS: "success" });
     };
 
+    chrome.storage.sync.get("VISIBLE_WEBCAM_DRAG", function (result) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+      } else {
+        result.VISIBLE_WEBCAM_DRAG
+          ? setVisibleWebcamDrag(result.VISIBLE_WEBCAM_DRAG)
+          : setVisibleWebcamDrag();
+      }
+    });
+
+    chrome.storage.sync.get("VISIBLE_EDIT_MENU", function (result) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+      } else {
+        result.VISIBLE_EDIT_MENU
+          ? setVisibleEditMenu(result.VISIBLE_EDIT_MENU)
+          : setVisibleEditMenu();
+      }
+    });
+
+    const storageListener = (changes, areaName) => {
+      if (areaName !== "sync") return;
+      if (changes.VISIBLE_WEBCAM_DRAG) {
+        setVisibleWebcamDrag(changes.VISIBLE_WEBCAM_DRAG.newValue);
+      }
+
+      if (changes.VISIBLE_EDIT_MENU) {
+        setVisibleEditMenu(changes.VISIBLE_EDIT_MENU.newValue);
+      }
+    };
+
     chrome.runtime.onMessage.addListener(messageListener);
+    chrome.storage.onChanged.addListener(storageListener);
     return () => {
       chrome.runtime.onMessage.removeListener(messageListener);
+      chrome.storage.onChanged.removeListener(storageListener);
     };
   }, []);
 
@@ -178,7 +208,8 @@ function ForegroundApp() {
       switch (temp) {
         case 0:
           onCloseModalStartRecording();
-          setVisibleEditMenu(true);
+          //  setVisibleEditMenu(true);
+          chrome.storage.sync.set({ ["VISIBLE_EDIT_MENU"]: true });
           break;
         case 1:
           setRecordingStarted(true);
@@ -343,9 +374,10 @@ function ForegroundApp() {
           setVisibleTimeCounterModal(true);
         } else {
           onCloseModalStartRecording();
-          setVisibleEditMenu(true);
           setRecordingStarted(true);
           chrome.storage.sync.set({ ["RECORDING_STARTED"]: true });
+          // setVisibleEditMenu(true);
+          chrome.storage.sync.set({ ["VISIBLE_EDIT_MENU"]: true });
         }
       }
     } catch (error) {
@@ -395,7 +427,8 @@ function ForegroundApp() {
 
     setRecordingStarted(false);
     chrome.storage.sync.set({ ["RECORDING_STARTED"]: false });
-    setVisibleEditMenu(false); // Closing edit tools menu
+    // setVisibleEditMenu(false); // Closing edit tools menu
+    chrome.storage.sync.set({ ["VISIBLE_EDIT_MENU"]: false });
   };
 
   const onCloseModalStartRecording = () => {

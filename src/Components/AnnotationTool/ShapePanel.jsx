@@ -27,7 +27,11 @@ const ShapePanel = (props) => {
               width: "96px",
             }}
             onClick={() =>
-              handleCurrentSelectedOption(ANNOTATION_TOOL_SELECTION.RECT)
+              currentSelectedOption === ANNOTATION_TOOL_SELECTION.RECT
+                ? handleCurrentSelectedOption(
+                    ANNOTATION_TOOL_SELECTION.IS_NOT_SELECTED
+                  )
+                : handleCurrentSelectedOption(ANNOTATION_TOOL_SELECTION.RECT)
             }
           />
         </div>
@@ -43,7 +47,11 @@ const ShapePanel = (props) => {
               width: "96px",
             }}
             onClick={() =>
-              handleCurrentSelectedOption(ANNOTATION_TOOL_SELECTION.ELLIPSE)
+              currentSelectedOption === ANNOTATION_TOOL_SELECTION.ELLIPSE
+                ? handleCurrentSelectedOption(
+                    ANNOTATION_TOOL_SELECTION.IS_NOT_SELECTED
+                  )
+                : handleCurrentSelectedOption(ANNOTATION_TOOL_SELECTION.ELLIPSE)
             }
           />
         </div>
@@ -59,7 +67,11 @@ const ShapePanel = (props) => {
               width: "96px",
             }}
             onClick={() =>
-              handleCurrentSelectedOption(ANNOTATION_TOOL_SELECTION.TRI)
+              currentSelectedOption === ANNOTATION_TOOL_SELECTION.TRI
+                ? handleCurrentSelectedOption(
+                    ANNOTATION_TOOL_SELECTION.IS_NOT_SELECTED
+                  )
+                : handleCurrentSelectedOption(ANNOTATION_TOOL_SELECTION.TRI)
             }
           />
         </div>
