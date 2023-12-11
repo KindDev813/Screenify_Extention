@@ -57,7 +57,6 @@ function OptionsApp() {
       if (areaName !== "sync") return;
       if (changes.BLOB_LINK) {
         setLocalVideoLink(changes.BLOB_LINK.newValue);
-        console.log(changes.BLOB_LINK.newValue);
       }
     };
 

@@ -194,12 +194,12 @@ function PopupApp() {
   useEffect(() => {
     if (cameraAllowed) {
       if (cameraSource === "Disabled") {
-        sendDatatoAllData({ type: EVENT.VISIBLE_WEBCAM_DRAG, data: false });
+        chrome.storage.sync.set({ ["VISIBLE_WEBCAM_DRAG"]: false });
       } else {
-        sendDatatoAllData({ type: EVENT.VISIBLE_WEBCAM_DRAG, data: true });
+        chrome.storage.sync.set({ ["VISIBLE_WEBCAM_DRAG"]: true });
       }
     } else {
-      sendDatatoAllData({ type: EVENT.VISIBLE_WEBCAM_DRAG, data: false });
+      chrome.storage.sync.set({ ["VISIBLE_WEBCAM_DRAG"]: false });
     }
   }, [cameraSource, cameraAllowed]);
 

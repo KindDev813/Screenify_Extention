@@ -59,16 +59,15 @@ const AnnotationTool = (props) => {
   };
   return (
     <>
-      <div className="at_container">
-        {!switchDropEditMenu ? (
-          <FloatButton.Group
-            type="primary"
-            style={{
-              left: 20,
-              bottom: 20,
-            }}
-          >
-            {/* <FloatButton
+      {!switchDropEditMenu ? (
+        <FloatButton.Group
+          type="primary"
+          style={{
+            left: 20,
+            bottom: 20,
+          }}
+        >
+          {/* <FloatButton
                   icon={
                     visibleMicrophoneTrack ? (
                       <MdOutlineVolumeUp />
@@ -85,137 +84,160 @@ const AnnotationTool = (props) => {
                   onClick={() => setVisibleVolumeTrack(!visibleVolumeTrack)}
                 /> */}
 
-            <FloatButton.Group
-              open={annotationToolsOpen}
-              trigger="click"
-              type="primary"
-              style={{
-                left: 20,
-                bottom: 20,
-                marginBottom: 55, // 165
-              }}
-              icon={<MdOutlinePalette />}
-              onClick={() => setAnnotationToolsOpen(!annotationToolsOpen)}
-            >
-              <FloatButton
-                icon={<MdDeleteOutline />}
-                onClick={() =>
-                  setCurrentSelectedOption(ANNOTATION_TOOL_SELECTION.DELETE)
-                }
-              />
-              <FloatButton
-                icon={<MdReply />}
-                onClick={() =>
-                  setCurrentSelectedOption(ANNOTATION_TOOL_SELECTION.UNDO)
-                }
-              />
-              <FloatButton
-                className="color_picker"
-                icon={
-                  <ColorPicker
-                    size="small"
-                    style={{ margin: "auto" }}
-                    value={nowColor}
-                    onChange={(value, hex) => setNowColor(hex)}
-                  />
-                }
-                onClick={() => {}}
-              ></FloatButton>
-              <FloatButton
-                icon={<MdTitle />}
-                badge={
-                  currentSelectedOption ===
-                    ANNOTATION_TOOL_SELECTION.TEXT_EDITOR && annotationBadge
-                }
-                onClick={() =>
-                  setCurrentSelectedOption(
-                    ANNOTATION_TOOL_SELECTION.TEXT_EDITOR
-                  )
-                }
-              />
-              <Popover
-                placement="rightTop"
-                trigger={"hover"}
-                content={
-                  <ShapePanel
-                    color={nowColor}
-                    currentSelectedOption={currentSelectedOption}
-                    handleCurrentSelectedOption={(value) => {
-                      setCurrentSelectedOption(value);
-                    }}
-                  />
-                }
-              >
-                <FloatButton
-                  icon={<IoShapesOutline />}
-                  badge={
-                    (currentSelectedOption === ANNOTATION_TOOL_SELECTION.RECT ||
-                      currentSelectedOption ===
-                        ANNOTATION_TOOL_SELECTION.ELLIPSE ||
-                      currentSelectedOption ===
-                        ANNOTATION_TOOL_SELECTION.TRI) &&
-                    annotationBadge
-                  }
-                />
-              </Popover>
-              <Popover
-                placement="rightTop"
-                trigger={"hover"}
-                content={freeHandContent}
-              >
-                <FloatButton
-                  icon={<MdOutlineModeEditOutline />}
-                  badge={
-                    currentSelectedOption ===
-                      ANNOTATION_TOOL_SELECTION.FREE_HAND && annotationBadge
-                  }
-                  onClick={() =>
-                    setCurrentSelectedOption(
-                      ANNOTATION_TOOL_SELECTION.FREE_HAND
-                    )
-                  }
-                />
-              </Popover>
-            </FloatButton.Group>
-
-            <FloatButton
-              icon={<MdOutlinePause />}
-              onClick={() => {
-                handlePauseResumeRecording();
-              }}
-            />
-          </FloatButton.Group>
-        ) : (
           <FloatButton.Group
-            // trigger="click"
+            open={annotationToolsOpen}
+            trigger="click"
             type="primary"
             style={{
               left: 20,
               bottom: 20,
-              zIndex: 40,
+              marginBottom: 55, // 165
             }}
+            icon={<MdOutlinePalette />}
+            onClick={() => setAnnotationToolsOpen(!annotationToolsOpen)}
           >
             <FloatButton
-              icon={<MdClose />}
-              onClick={() => {
-                handleSaveRecording();
-              }}
+              icon={<MdDeleteOutline />}
+              onClick={() =>
+                currentSelectedOption === ANNOTATION_TOOL_SELECTION.DELETE
+                  ? setCurrentSelectedOption(
+                      ANNOTATION_TOOL_SELECTION.IS_NOT_SELECTED
+                    )
+                  : setCurrentSelectedOption(ANNOTATION_TOOL_SELECTION.DELETE)
+              }
             />
             <FloatButton
-              icon={<MdCheck />}
-              onClick={() => {
-                handleSaveRecording();
-              }}
+              icon={<MdReply />}
+              onClick={() =>
+                currentSelectedOption === ANNOTATION_TOOL_SELECTION.UNDO
+                  ? setCurrentSelectedOption(
+                      ANNOTATION_TOOL_SELECTION.IS_NOT_SELECTED
+                    )
+                  : setCurrentSelectedOption(ANNOTATION_TOOL_SELECTION.UNDO)
+              }
             />
             <FloatButton
-              icon={<MdOutlinePlayArrow />}
-              onClick={() => {
-                handlePauseResumeRecording();
-              }}
+              className="color_picker"
+              icon={
+                <ColorPicker
+                  size="small"
+                  style={{ margin: "auto" }}
+                  value={nowColor}
+                  onChange={(value, hex) => setNowColor(hex)}
+                />
+              }
+              onClick={() => {}}
+            ></FloatButton>
+            <FloatButton
+              icon={<MdTitle />}
+              badge={
+                currentSelectedOption ===
+                  ANNOTATION_TOOL_SELECTION.TEXT_EDITOR && annotationBadge
+              }
+              onClick={() =>
+                currentSelectedOption === ANNOTATION_TOOL_SELECTION.TEXT_EDITOR
+                  ? setCurrentSelectedOption(
+                      ANNOTATION_TOOL_SELECTION.IS_NOT_SELECTED
+                    )
+                  : setCurrentSelectedOption(
+                      ANNOTATION_TOOL_SELECTION.TEXT_EDITOR
+                    )
+              }
             />
+            <Popover
+              placement="rightTop"
+              trigger={"hover"}
+              content={
+                <ShapePanel
+                  color={nowColor}
+                  currentSelectedOption={currentSelectedOption}
+                  handleCurrentSelectedOption={(value) => {
+                    setCurrentSelectedOption(value);
+                  }}
+                />
+              }
+            >
+              <FloatButton
+                icon={<IoShapesOutline />}
+                badge={
+                  (currentSelectedOption === ANNOTATION_TOOL_SELECTION.RECT ||
+                    currentSelectedOption ===
+                      ANNOTATION_TOOL_SELECTION.ELLIPSE ||
+                    currentSelectedOption === ANNOTATION_TOOL_SELECTION.TRI) &&
+                  annotationBadge
+                }
+              />
+            </Popover>
+            <Popover
+              placement="rightTop"
+              trigger={"hover"}
+              content={freeHandContent}
+            >
+              <FloatButton
+                icon={<MdOutlineModeEditOutline />}
+                badge={
+                  currentSelectedOption ===
+                    ANNOTATION_TOOL_SELECTION.FREE_HAND && annotationBadge
+                }
+                onClick={() =>
+                  currentSelectedOption === ANNOTATION_TOOL_SELECTION.FREE_HAND
+                    ? setCurrentSelectedOption(
+                        ANNOTATION_TOOL_SELECTION.IS_NOT_SELECTED
+                      )
+                    : setCurrentSelectedOption(
+                        ANNOTATION_TOOL_SELECTION.FREE_HAND
+                      )
+                }
+              />
+            </Popover>
           </FloatButton.Group>
-        )}
 
+          <FloatButton
+            icon={<MdOutlinePause />}
+            onClick={() => {
+              handlePauseResumeRecording();
+            }}
+          />
+        </FloatButton.Group>
+      ) : (
+        <FloatButton.Group
+          // trigger="click"
+          type="primary"
+          style={{
+            left: 20,
+            bottom: 20,
+            zIndex: 40,
+          }}
+        >
+          <FloatButton
+            icon={<MdClose />}
+            onClick={() => {
+              handleSaveRecording();
+            }}
+          />
+          <FloatButton
+            icon={<MdCheck />}
+            onClick={() => {
+              handleSaveRecording();
+            }}
+          />
+          <FloatButton
+            icon={<MdOutlinePlayArrow />}
+            onClick={() => {
+              handlePauseResumeRecording();
+            }}
+          />
+        </FloatButton.Group>
+      )}
+      <div
+        className="at_container"
+        style={{
+          pointerEvents:
+            currentSelectedOption === ANNOTATION_TOOL_SELECTION.IS_NOT_SELECTED
+              ? "none"
+              : "all",
+        }}
+      >
         <AnnotationPlayField
           nowColor={nowColor}
           nowSize={nowSize}
