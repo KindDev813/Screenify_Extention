@@ -8,7 +8,14 @@ import manifest from "./public/manifest.json";
 export default defineConfig({
   plugins: [react(), crx({ manifest })],
   build: {
+    chunkSizeWarningLimit: 100,
     rollupOptions: {
+      onwarn(warning, warn) {
+        if (warning.code === "MODULE_LEVEL_DIRECTIVE") {
+          return;
+        }
+        warn(warning);
+      },
       input: {
         // path relative to project root
         main: path.resolve(__dirname, "./index.html"),

@@ -3,7 +3,7 @@ import WebcamDrag from "../../Components/WebcamDrag";
 import TimeCounterModal from "../../Components/TimeCounterModal";
 import AnnotationTool from "../../Components/AnnotationTool";
 
-import { alertModal, isEmpty, sendDatatoAllData } from "../../utils/functions";
+import { alertModal, isEmpty } from "../../utils/functions";
 import { EVENT } from "../../utils/constants";
 import "./style.css";
 
@@ -387,6 +387,8 @@ function ForegroundApp() {
 
   // Saving & downloading chunks into file
   const onSaveRecording = () => {
+    chrome.storage.sync.set({ ["VISIBLE_WEBCAM_DRAG"]: false });
+
     if (mediaRecorder) {
       mediaRecorder.stop();
       mediaRecorder.onstop = () => {

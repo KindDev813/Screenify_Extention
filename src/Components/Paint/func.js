@@ -62,6 +62,7 @@ export function createText(x, y, fontSize, penColor, readonly = false) {
     selectable: !readonly,
     fontSize,
     lockScalingY: true,
+    editable: true,
   });
   text.set({ strokeUniform: true });
   text.setControlsVisibility({

@@ -9,11 +9,7 @@ import {
 
 import LabelSelect from "../../Components/LabelSelect";
 import { QUALITYOPTIONS, LABEL, EVENT } from "../../utils/constants";
-import {
-  isEmpty,
-  sendDatatoForeGround,
-  sendDatatoAllData,
-} from "../../utils/functions";
+import { isEmpty, sendDatatoForeGround } from "../../utils/functions";
 import "./style.css";
 
 const modeLabels = [
