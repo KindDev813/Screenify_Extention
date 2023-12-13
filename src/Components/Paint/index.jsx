@@ -58,9 +58,13 @@ const Paint = React.forwardRef(
 
         switch (drawMode) {
           case ANNOTATION_TOOL_SELECTION.TEXT_EDITOR:
-            text = createText(origX, origY, penSize * 6, penColor, readonly);
-            canvas.add(text);
-            canvas.setActiveObject(text);
+            if (event.target?.type === "textbox") {
+              console.log("This is text editor");
+            } else {
+              text = createText(origX, origY, penSize * 6, penColor, readonly);
+              canvas.add(text);
+              canvas.setActiveObject(text);
+            }
             break;
           case ANNOTATION_TOOL_SELECTION.RECT:
             rect = createRect(origX, origY, penColor, penSize, readonly);

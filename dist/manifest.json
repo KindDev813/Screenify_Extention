@@ -32,8 +32,8 @@
   "content_scripts": [
     {
       "js": [
-        "assets/content-script-loader.index.jsx.6bd9233b.f6e1e6a6.js",
-        "assets/content-script-loader.index.jsx.e0431b2d.765d04c1.js",
+        "assets/content-script-loader.index.jsx.8e961941.9c1c6b51.js",
+        "assets/content-script-loader.index.jsx.1ab0da8b.72d91260.js",
         "assets/content-script-loader.ffmpeg-core.js.ec57f814.c0e91136.js",
         "assets/content-script-loader.ffmpeg.min.js.f50bac52.acaaa3cf.js"
       ],
@@ -65,12 +65,12 @@
         "<all_urls>"
       ],
       "resources": [
-        "assets/functions.c65ca704.js",
-        "assets/index.esm.f158f7be.js",
-        "assets/index.f4663c05.js",
-        "assets/index.jsx.6bd9233b.js",
-        "assets/index.c1ab3068.js",
-        "assets/index.jsx.e0431b2d.js",
+        "assets/functions.98d5d63d.js",
+        "assets/index.esm.70f593e6.js",
+        "assets/index.8264d449.js",
+        "assets/index.jsx.8e961941.js",
+        "assets/index.ccdb9a53.js",
+        "assets/index.jsx.1ab0da8b.js",
         "assets/ffmpeg-core.js.ec57f814.js",
         "assets/ffmpeg.min.js.f50bac52.js"
       ],

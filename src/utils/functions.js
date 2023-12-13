@@ -34,6 +34,8 @@ export const trimVideoFFmpeg = async (
       new Blob([data.buffer], { type: "video/mp4" })
     );
 
+    await ffmpeg.exit();
+
     return downUrl;
   } catch (error) {
     console.log("Something went wrong!", error);
@@ -75,6 +77,8 @@ export const cropVideoFFmpeg = async (
     const downUrl = URL.createObjectURL(
       new Blob([data.buffer], { type: "video/mp4" })
     );
+
+    await ffmpeg.exit();
 
     return downUrl;
   } catch (error) {
@@ -122,6 +126,8 @@ export const musicOverFFmpeg = async (
     const downUrl = URL.createObjectURL(
       new Blob([data.buffer], { type: "video/mp4" })
     );
+
+    await ffmpeg.exit();
 
     return downUrl;
   } catch (error) {
@@ -195,6 +201,10 @@ export const extractImagesFFmpeg = async (
         new Blob([data.buffer], { type: "image/png" })
       );
       imageLinks.push(downUrl);
+
+      if (i === previews - 1) {
+        await ffmpeg.exit();
+      }
     }
 
     return imageLinks;
@@ -228,20 +238,5 @@ export const sendDatatoForeGround = (value) => {
         console.log(response.status);
       }
     });
-  });
-};
-
-export const sendDatatoAllData = (value) => {
-  chrome.tabs.query({}, function (tabs) {
-    localStorage.setItem(EVENT.VISIBLE_WEBCAM_DRAG, JSON.stringify(value));
-    for (var i = 0; i < tabs.length; ++i) {
-      chrome.tabs.sendMessage(tabs[i].id, value, function (response) {
-        if (chrome.runtime.lastError) {
-          console.error(chrome.runtime.lastError.message);
-        } else {
-          console.log(response.status);
-        }
-      });
-    }
   });
 };

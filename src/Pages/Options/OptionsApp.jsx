@@ -19,11 +19,12 @@ import {
 import "./style.css";
 
 const { createFFmpeg, fetchFile } = FFmpeg;
-const ffmpeg = createFFmpeg({
-  corePath: chrome.runtime.getURL("vendor/ffmpeg-core.js"),
-  log: true,
-  mainName: "main",
-});
+let ffmpeg;
+// const ffmpeg = createFFmpeg({
+//   corePath: chrome.runtime.getURL("vendor/ffmpeg-core.js"),
+//   log: true,
+//   mainName: "main",
+// });
 
 function OptionsApp() {
   const [limitMinTrimValue, setlimitMinTrimValue] = useState(0);
@@ -38,10 +39,11 @@ function OptionsApp() {
   const [timeRangeBgImages, setTimeRangeBgImages] = useState([]);
 
   useEffect(() => {
-    const loadFfmpeg = async () => {
-      await ffmpeg.load();
-      setLoadingVisible(false);
-    };
+    ffmpegLoad();
+    // const loadFfmpeg = async () => {
+    //   await ffmpeg.load();
+    //   setLoadingVisible(false);
+    // };
 
     chrome.storage.sync.get("BLOB_LINK", function (result) {
       if (chrome.runtime.lastError) {
@@ -61,7 +63,7 @@ function OptionsApp() {
     };
 
     chrome.storage.onChanged.addListener(storageListener);
-    loadFfmpeg();
+    // loadFfmpeg();
     return () => {
       chrome.storage.onChanged.removeListener(storageListener);
     };
@@ -82,6 +84,8 @@ function OptionsApp() {
   useEffect(() => {
     const getImages = async () => {
       if (localVideoLink && !loadingVisible) {
+        await ffmpegLoad();
+
         let fileName = new Date().getTime();
         let imageLinks = await extractImagesFFmpeg(
           ffmpeg,
@@ -97,6 +101,17 @@ function OptionsApp() {
 
     getImages();
   }, [localVideoLink, loadingVisible]);
+
+  const ffmpegLoad = async () => {
+    ffmpeg = await createFFmpeg({
+      corePath: chrome.runtime.getURL("vendor/ffmpeg-core.js"),
+      log: true,
+      mainName: "main",
+    });
+
+    await ffmpeg.load();
+    setLoadingVisible(false);
+  };
 
   const onSaveAndDownload = async () => {
     setLoadingVisible(true);
@@ -123,6 +138,7 @@ function OptionsApp() {
   };
 
   const trimModeDown = async (fileName) => {
+    await ffmpegLoad();
     let url = await trimVideoFFmpeg(
       ffmpeg,
       fileName,
@@ -136,6 +152,7 @@ function OptionsApp() {
   };
 
   const cropModeDown = async (fileName) => {
+    await ffmpegLoad();
     let url = await cropVideoFFmpeg(
       ffmpeg,
       fileName,
@@ -149,6 +166,7 @@ function OptionsApp() {
   };
 
   const musicOverModeDown = async (fileName) => {
+    await ffmpegLoad();
     let url = await musicOverFFmpeg(
       ffmpeg,
       fileName,
