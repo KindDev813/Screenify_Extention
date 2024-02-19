@@ -1,4 +1,4 @@
-# Cinema 8 | Screen Recorder
+# Screen Recorder
 
 Web app & Chrome extension by kinddev813
 
